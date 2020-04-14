@@ -30,8 +30,8 @@ end
 function Player:playerInput(dt)
     if love.keyboard.isDown(self.controls["right"]) then self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed) end
     if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed) end
-    if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.min(self.yVelocity - self.entityAcceleration,  self.entitySpeed) end
-    if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.max(self.yVelocity + self.entityAcceleration, -self.entitySpeed) end
+    if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed) end
+    if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed) end
 end
 
 function Player:moveEntity(dt)
@@ -41,8 +41,9 @@ function Player:moveEntity(dt)
     local shrinkValue = 0.01
     local tmpX = self.x + self.xVelocity * dt/2
     local tmpY = self.y + self.yVelocity * dt/2
+
     --TODO--[[Fix Invisible Walls]]
-    --TODO--[[Fix Vertical Movement being faster than horizontal]]
+
     --LEFT--
     local topNode = tileMap[math.floor((tmpX + shrinkValue)) .. " " .. math.floor((self.y + shrinkValue))]
     local botNode = tileMap[math.floor((tmpX + shrinkValue)) .. " " .. math.ceil((self.y - shrinkValue))]

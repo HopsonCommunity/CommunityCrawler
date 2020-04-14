@@ -179,6 +179,10 @@ function randWalkMap(steps)
         if tileMap[pos.x .. " " .. pos.y] == nil then
             tileMap[pos.x .. " " .. pos.y] = tiles["brickFloor"]
             tileNum = tileNum + 1
+            if pos.x > rightX  then rightX = pos.x end
+            if pos.x < leftX   then leftX = pos.x end
+            if pos.y > bottomY then bottomY = pos.y end
+            if pos.y < topY    then topY = pos.y end
         end
 
         local dir = math.random(1, 4)
