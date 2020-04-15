@@ -1,4 +1,5 @@
 require "full"
+require "animation"
 Player = class:new()
 
 function Player:load()
@@ -10,7 +11,7 @@ function Player:load()
     self.xVelocity = 0
     self.yVelocity = 0
     self.friction = 0.97
-    self.texture = loadImage("", "player")
+    self.texture = loadImage("entities", "player_modelDefault")
     self.health = 100
     self.maxHealth = 100
     self.debugMode = false
@@ -20,6 +21,7 @@ function Player:load()
     self.controls["up"] = "w"
     self.controls["down"] = "s"
     self.controls["debug"] = "f3"
+    self.animation = newAnimation(self.texture, 32, 64, 1)
 end
 
 function Player:hurt(dmg)
