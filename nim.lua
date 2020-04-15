@@ -26,9 +26,14 @@ function nim.newAnim(image, width, height, duration)
     return animation
 end
 
-function nim.drawAnim(anim, x, y, r)
+function nim.drawAnim(anim, x, y, r, flip)
 	local spriteNum = math.floor(anim.currentTime / anim.duration * #anim.quads) + 1
-    love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2), y + (anim.height / 2), math.rad((r or 90) - 90), 1, 1, anim.width / 2, anim.height / 2)
+	if spriteNum < 1 then return end
+	if flip then
+		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2), y + (anim.height / 2), math.rad((r or 90) - 90), -1, 1, anim.width / 2, anim.height / 2)
+	else
+		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2), y + (anim.height / 2), math.rad((r or 90) - 90), 1, 1, anim.width / 2, anim.height / 2)
+	end
 end
 
 function nim.drawTile(anim, x, y, r, flip)
