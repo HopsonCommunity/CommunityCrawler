@@ -1,11 +1,11 @@
-require 'globals'
+require "globals"
 require "utils"
 require "tiles"
 require "player"
 require "mapGenerator"
 require "drawables"
 
-lightworld:SetColor(0, 0, 0)
+lightworld:SetColor(127, 127, 127)
 
 function love.load()
     player = Player()
@@ -16,6 +16,7 @@ function love.load()
     --generateMap()
     randWalkMap(1000)
     fillHolesAndSetWalls()
+	generateMapLighting()
     --exampleMap()
 end
 
@@ -23,7 +24,7 @@ function love.update(dt)
     player:update(dt)
 	lightworld:Update()
 	lightworld:SetPosition(player.x * 32 + (-love.graphics.getWidth() / 2), player.y * 32 + (-love.graphics.getHeight() / 2), 1)
-	playerLight:SetPosition((player.x * 32), (player.y * 32))
+	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
 end
 
 function love.mousepressed(button, x, y)
