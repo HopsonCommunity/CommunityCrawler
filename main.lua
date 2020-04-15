@@ -33,7 +33,8 @@ function love.draw()
         love.graphics.draw(v.texture, coords[1] * 32, coords[2] * 32)
     end
 
-    nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32)
+    local flip = player.facing == "left"
+    nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32, 90, flip)
     --love.graphics.draw(player.texture, player.x * 32, player.y * 32)
 
     love.graphics.reset()
