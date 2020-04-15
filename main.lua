@@ -19,10 +19,6 @@ end
 
 function love.update(dt)
     player:update(dt)
-    player.animation.currentTime = player.animation.currentTime + dt
-    if player.animation.currentTime >= player.animation.duration then
-        player.animation.currentTime = player.animation.currentTime - player.animation.duration
-    end
 end
 
 function love.draw()
@@ -37,8 +33,7 @@ function love.draw()
         love.graphics.draw(v.texture, coords[1] * 32, coords[2] * 32)
     end
 
-    local spriteNum = math.floor(player.animation.currentTime / player.animation.duration * #player.animation.quads) + 1
-    love.graphics.draw(player.animation.spriteSheet, player.animation.quads[spriteNum], player.x * 32, player.y*32, 0, 1, 1, 0, 32)
+    nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32)
     --love.graphics.draw(player.texture, player.x * 32, player.y * 32)
 
     love.graphics.reset()

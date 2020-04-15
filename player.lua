@@ -1,5 +1,4 @@
 require "full"
-require "animation"
 Player = class:new()
 
 function Player:load()
@@ -21,7 +20,7 @@ function Player:load()
     self.controls["up"] = "w"
     self.controls["down"] = "s"
     self.controls["debug"] = "f3"
-    self.animation = newAnimation(self.texture, 32, 64, 1)
+    self.animation = nim.newAnim(self.texture, 32, 64, 1)
 end
 
 function Player:hurt(dmg)
@@ -73,4 +72,5 @@ end
 function Player:update(dt)
     self:input(dt)
     self:move(dt)
+	self.animation:update(dt)
 end

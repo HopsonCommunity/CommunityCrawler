@@ -1,3 +1,4 @@
+nim = require("nim")
 tileMap = {}
 leftX = 0
 rightX = 0
