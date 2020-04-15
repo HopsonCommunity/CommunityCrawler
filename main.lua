@@ -3,6 +3,7 @@ require "utils"
 require "tiles"
 require "player"
 require "mapGenerator"
+require "drawables"
 
 function love.load()
     player = Player()
@@ -11,8 +12,8 @@ function love.load()
     --math.randomseed(os.clock())
     math.randomseed(1337)
     --generateMap()
-    --randWalkMap(1000)
-    exampleMap()
+    randWalkMap(1000)
+    --exampleMap()
 end
 
 function love.update(dt)
@@ -32,9 +33,11 @@ function love.draw()
     end
 
     love.graphics.draw(player.texture, player.x * 32, player.y * 32)
-    love.graphics.print(leftX .. " " .. topY, leftX * 32, topY * 32)
-    love.graphics.print(rightX .. " " .. bottomY, rightX * 32, bottomY * 32)
+
     love.graphics.reset()
-    love.graphics.print(love.timer.getFPS(), 32, 32)
+    if player.debugMode then
+        drawDebug()
+    end
+
     love.graphics.pop()
 end

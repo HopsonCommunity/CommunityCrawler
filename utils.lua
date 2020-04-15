@@ -46,3 +46,7 @@ end
 function inTileMap(x, y)
     return tileMap[x .. " " .. y] ~= nil
 end
+
+function ceiling(val)
+    if math.ceil(val) == 0 then return 0 else return math.ceil(val) end
+end

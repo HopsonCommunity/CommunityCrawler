@@ -13,11 +13,13 @@ function Player:load()
     self.texture = loadImage("", "player")
     self.health = 100
     self.maxHealth = 100
+    self.debugMode = false
     self.controls = {}
     self.controls["left"] = "a"
     self.controls["right"] = "d"
     self.controls["up"] = "w"
     self.controls["down"] = "s"
+    self.controls["debug"] = "f3"
 end
 
 function Player:hurt(dmg)
@@ -27,51 +29,46 @@ function Player:heal(hp)
     if self.health + hp > self.maxHealth then self.health = self.maxHealth else self.health = self.health + hp end
 end
 
-function Player:playerInput(dt)
+function Player:input(dt)
     if love.keyboard.isDown(self.controls["right"]) then self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed) end
     if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed) end
     if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed) end
     if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed) end
+    if love.keyboard.isDown(self.controls["debug"]) then self.debugMode = not self.debugMode end
 end
 
-function Player:moveEntity(dt)
-
+function Player:move(dt)
     self.xVelocity = self.xVelocity * self.friction
     self.yVelocity = self.yVelocity * self.friction
-    local shrinkValue = 0.01
-    local tmpX = self.x + self.xVelocity * dt/2
-    local tmpY = self.y + self.yVelocity * dt/2
+    local pushValue = 1/32
+    local mv = {}
 
-    --TODO--[[Fix Invisible Walls]]
+    mv.x = self.x + self.xVelocity * dt/2
+    mv.y = self.y + self.yVelocity * dt/2
 
-    --LEFT--
-    local topNode = tileMap[math.floor((tmpX + shrinkValue)) .. " " .. math.floor((self.y + shrinkValue))]
-    local botNode = tileMap[math.floor((tmpX + shrinkValue)) .. " " .. math.ceil((self.y - shrinkValue))]
-    if tmpX > self.x then
-        --RIGHT--
-        topNode = tileMap[math.ceil((tmpX - shrinkValue)) .. " " .. math.floor((self.y + shrinkValue))]
-        botNode = tileMap[math.ceil((tmpX - shrinkValue)) .. " " .. math.ceil((self.y - shrinkValue))]
-    end
-    if (topNode ~= nil and not topNode.solid) and (botNode ~= nil and not botNode.solid) then
-        self.x = tmpX
+    mv.XtopLeft = tileMap[math.floor(mv.x + pushValue) .. " " .. math.floor(self.y + pushValue)]
+    mv.XbotLeft = tileMap[math.floor(mv.x + pushValue) .. " " .. ceiling (self.y - pushValue)]
+    mv.XtopRight = tileMap[ceiling(mv.x - pushValue) .. " " .. math.floor(self.y + pushValue)]
+    mv.XbotRight = tileMap[ceiling(mv.x - pushValue) .. " " .. ceiling (self.y - pushValue)]
+
+    if (self.x > mv.x) and (mv.XtopLeft ~= nil and not mv.XtopLeft.solid) and (mv.XbotLeft ~= nil and not mv.XbotLeft.solid) or --mv Left
+       (self.x < mv.x) and (mv.XtopRight ~= nil and not mv.XtopRight.solid) and (mv.XbotRight ~= nil and not mv.XbotRight.solid) then --mv Right
+           self.x = mv.x
     end
 
-    --UP--
-    local leftNode = tileMap[math.floor((self.x + shrinkValue)) .. " " .. math.floor((tmpY + shrinkValue))]
-    local rightNode = tileMap[math.ceil((self.x - shrinkValue)) .. " " .. math.floor((tmpY + shrinkValue))]
-    if tmpY > self.y then
-        --DOWN--
-        leftNode = tileMap[math.floor((self.x + shrinkValue)) .. " " .. math.ceil((tmpY - shrinkValue))]
-        rightNode = tileMap[math.ceil((self.x - shrinkValue)) .. " " .. math.ceil((tmpY - shrinkValue))]
-    end
+    mv.YtopLeft = tileMap[math.floor(self.x + pushValue) .. " " .. math.floor(mv.y + pushValue)]
+    mv.YtopRight = tileMap[ceiling(self.x - pushValue) .. " " .. math.floor(mv.y + pushValue)]
+    mv.YbotLeft = tileMap[math.floor(self.x + pushValue) .. " " .. ceiling (mv.y - pushValue)]
+    mv.YbotRight = tileMap[ceiling(self.x - pushValue) .. " " .. ceiling (mv.y - pushValue)]
 
-    if (leftNode ~= nil and not leftNode.solid) and (rightNode ~= nil and not rightNode.solid) then
-        self.y = tmpY
+    if (self.y < mv.y) and (mv.YbotLeft ~= nil and not mv.YbotLeft.solid) and (mv.YbotRight ~= nil and not mv.YbotRight.solid) or --mv Down
+       (self.y > mv.y) and (mv.YtopLeft ~= nil and not mv.YtopLeft.solid) and (mv.YtopRight ~= nil and not mv.YtopRight.solid) then --mv Up
+           self.y = mv.y
     end
 
 end
 
 function Player:update(dt)
-    self:playerInput(dt)
-    self:moveEntity(dt)
+    self:input(dt)
+    self:move(dt)
 end
