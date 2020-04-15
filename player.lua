@@ -24,6 +24,8 @@ function Player:load()
     self.animation = nim.newAnim(self.texture, 32, 64, 1)
     self.healthBar = loadImage("GUI", "healthBar")
     self.healthImage = loadImage("GUI", "health")
+    self.chatOpen = false
+    self.chatWrite = ""
 end
 
 function Player:hurt(dmg)

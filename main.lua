@@ -4,10 +4,12 @@ require "tiles"
 require "player"
 require "mapGenerator"
 require "drawables"
+require "commands"
 
 lightworld:SetColor(0, 0, 0)
 
 function love.load()
+    chatTexts = {}
     player = Player()
     player:load()
 
@@ -27,6 +29,41 @@ function love.update(dt)
 end
 
 function love.mousepressed(button, x, y)
+
+end
+function love.textinput(t)
+    if player.chatOpen == true then
+        local tmp = love.graphics.newText(love.graphics.newFont(16), player.chatWrite .. t)
+        if tmp:getWidth() < 500 then
+            player.chatWrite = player.chatWrite .. t
+        end
+    end
+end
+
+function love.keypressed(key, scancode, isrepeat)
+    if player.chatOpen == true then
+        if key == "return" or key == "kpenter" then
+            player.chatOpen = false
+            if string.sub(player.chatWrite, 1, 1) == "/" and string.len(player.chatWrite) > 1 then evalCommands(player.chatWrite) end
+            if len(chatTexts) >= 22 then
+                table.remove(chatTexts, 1)
+            end
+            table.insert(chatTexts, player.chatWrite)
+            player.chatWrite = ""
+            return
+        end
+
+        tmp = love.graphics.newText(love.graphics.newFont(16), player.chatWrite .. love.system.getClipboardText())
+        if love.keyboard.isDown("lctrl") and key == "v" and tmp:getWidth() < 500 then
+            player.chatWrite = player.chatWrite .. love.system.getClipboardText()
+        elseif key == "backspace" then player.chatWrite = string.sub(player.chatWrite, 1, string.len(player.chatWrite)-1) end
+    end
+    if (key == "return" or key == "kpenter") and player.chatOpen == false then
+        player.chatOpen = true
+    end
+    if key == "/" and player.chatOpen == false then
+        player.chatOpen = true
+    end
 
 end
 
@@ -64,9 +101,9 @@ function love.draw()
 	lightworld:Draw()
 
 
-    if player.debugMode then
-        drawDebug()
-    end
+    drawWholeChat()
+    if player.chatOpen == true then drawChat() end
+    if player.debugMode then drawDebug() end
 
     love.graphics.pop()
 end
