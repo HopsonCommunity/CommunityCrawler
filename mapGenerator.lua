@@ -200,6 +200,30 @@ function randWalkMap(steps)
     end
 end
 
+function fillHolesAndSetWalls()
+    for y = topY - 1, bottomY + 1 do
+        for x = leftX - 1, rightX + 1 do
+            if tileMap[x .. " " .. y] == nil then
+
+                local surround = 0
+
+                if tileMap[x + 1 .. " " .. y] == nil then surround = surround + 1 end
+                if tileMap[x - 1 .. " " .. y] == nil then surround = surround + 1 end
+                if tileMap[x .. " " .. y + 1] == nil then surround = surround + 1 end
+                if tileMap[x .. " " .. y - 1] == nil then surround = surround + 1 end
+                if tileMap[x + 1 .. " " .. y + 1] == nil then surround = surround + 1 end
+                if tileMap[x + 1 .. " " .. y - 1] == nil then surround = surround + 1 end
+                if tileMap[x - 1 .. " " .. y + 1] == nil then surround = surround + 1 end
+                if tileMap[x - 1 .. " " .. y - 1] == nil then surround = surround + 1 end
+
+                if surround < 3 then tileMap[x .. " " .. y] = tiles["brickFloor"]
+                else tileMap[x .. " " .. y] = tiles["brickWall"] end
+
+            end
+        end
+    end
+end
+
 function exampleMap()
     generateRoom(0, 0, 50, 50)
     for x = 20, 30 do

@@ -13,6 +13,7 @@ function love.load()
     math.randomseed(1337)
     --generateMap()
     randWalkMap(1000)
+    fillHolesAndSetWalls()
     --exampleMap()
 end
 
