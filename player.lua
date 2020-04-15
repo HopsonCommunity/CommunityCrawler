@@ -60,9 +60,9 @@ function Player:move(dt)
     mv.x = self.x + self.xVelocity * dt/2
     mv.y = self.y + self.yVelocity * dt/2
 
-    mv.XtopLeft = tileMap[math.floor(mv.x + pushValue) .. " " .. math.floor(self.y + pushValue)]
+    mv.XtopLeft = tileMap[math.floor(mv.x + pushValue) .. " " .. math.floor(self.y + pushValue + 0.5)]
     mv.XbotLeft = tileMap[math.floor(mv.x + pushValue) .. " " .. ceiling (self.y - pushValue)]
-    mv.XtopRight = tileMap[ceiling(mv.x - pushValue) .. " " .. math.floor(self.y + pushValue)]
+    mv.XtopRight = tileMap[ceiling(mv.x - pushValue) .. " " .. math.floor(self.y + pushValue + 0.5)]
     mv.XbotRight = tileMap[ceiling(mv.x - pushValue) .. " " .. ceiling (self.y - pushValue)]
 
     if (self.x > mv.x) and (mv.XtopLeft ~= nil and not mv.XtopLeft.solid) and (mv.XbotLeft ~= nil and not mv.XbotLeft.solid) or --mv Left
@@ -70,8 +70,8 @@ function Player:move(dt)
            self.x = mv.x
     end
 
-    mv.YtopLeft = tileMap[math.floor(self.x + pushValue) .. " " .. math.floor(mv.y + pushValue)]
-    mv.YtopRight = tileMap[ceiling(self.x - pushValue) .. " " .. math.floor(mv.y + pushValue)]
+    mv.YtopLeft = tileMap[math.floor(self.x + pushValue) .. " " .. math.floor(mv.y + pushValue + 0.5)]
+    mv.YtopRight = tileMap[ceiling(self.x - pushValue) .. " " .. math.floor(mv.y + pushValue + 0.5)]
     mv.YbotLeft = tileMap[math.floor(self.x + pushValue) .. " " .. ceiling (mv.y - pushValue)]
     mv.YbotRight = tileMap[ceiling(self.x - pushValue) .. " " .. ceiling (mv.y - pushValue)]
 
