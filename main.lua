@@ -57,6 +57,10 @@ function love.draw()
     love.graphics.draw(luger, player.x * 32 + gunPos, player.y * 32, f*math.asin(opp / hyp), f, 1)
 
     love.graphics.reset()
+    love.graphics.draw(player.healthBar, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 30)
+    local HPPerc = (1 - (player.health / player.maxHealth)) * 96
+    local HPQuad = love.graphics.newQuad(0, HPPerc, 96, 96, player.healthImage:getDimensions())
+    love.graphics.draw(player.healthImage, HPQuad, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 30 + HPPerc)
 	lightworld:Draw()
 
 

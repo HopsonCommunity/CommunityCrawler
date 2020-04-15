@@ -22,6 +22,8 @@ function Player:load()
     self.controls["debug"] = "f3"
     self.facing = "right"
     self.animation = nim.newAnim(self.texture, 32, 64, 1)
+    self.healthBar = loadImage("GUI", "healthBar")
+    self.healthImage = loadImage("GUI", "health")
 end
 
 function Player:hurt(dmg)
