@@ -1,4 +1,7 @@
 nim = require("nim")
+shadows = require("shadows")
+LightWorld = require("shadows.LightWorld")
+Light = require("shadows.Light")
 tileMap = {}
 leftX = 0
 rightX = 0
@@ -6,3 +9,5 @@ bottomY = 0
 topY = 0
 debug1 = {}
 debug2 = {}
+lightworld = LightWorld:new()
+playerLight = Light:new(lightworld, 900)
