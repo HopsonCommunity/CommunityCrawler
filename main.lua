@@ -41,11 +41,21 @@ function love.update(dt)
     for k, v in pairs(entities) do
         v:update(dt)
     end
-	lightworld:SetPosition((player.x + 0.5) * 32 + (-love.graphics.getWidth() / 2), player.y * 32 + (-love.graphics.getHeight() / 2), 1)
+	lightworld:SetPosition(math.floor((player.x + 0.5) * 32 + (-love.graphics.getWidth() / 2)), math.floor(player.y * 32 + (-love.graphics.getHeight() / 2)), 1)
 	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
 	lightworld:Update()
 	updateSliders()
 	player.itemCooldown = math.max(player.itemCooldown - dt, 0)
+	if player.rolling then
+		player.rollTime = player.rollTime + dt
+		player:updateRoll()
+		if player.rollTime > player.rollLength then
+			player.rolling = false
+		end
+	else
+		player.rollCooldown = math.max(player.rollCooldown - dt, 0)
+	end
+	nim.updateParticles(dt)
 end
 
 function love.textinput(t)
@@ -111,7 +121,7 @@ function love.wheelmoved(x, y)
 end
 
 function love.mousepressed(x, y, button, isTouch)
-    if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" and player.itemCooldown == 0 then
+    if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" and player.itemCooldown == 0 and not player.rolling then
 		for i=1,player.inventory.hotbar[player.inventory.selected].bulletNum do
 			local newProjectile = Projectile()
 			newProjectile:load()
@@ -153,18 +163,19 @@ function love.draw()
     end
 	--]]
 	love.graphics.draw(atlasBatch)
+	nim.drawParticles()
+	for k, v in pairs(entities) do
+        nim.drawAnim(v.currentAnimation, v.x * 32, v.y * 32)
+    end
 
 	updateProjectiles()
 
     love.graphics.reset()
 	lightworld:Draw()
 
-	love.graphics.translate(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
+	love.graphics.translate(math.floor(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2)), math.floor(-player.y * 32 + (love.graphics.getHeight() / 2)))
 	local flip = player.facing == "left"
     nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
-    for k, v in pairs(entities) do
-        nim.drawAnim(v.currentAnimation, v.x * 32, v.y * 32)
-    end
 	if player.inventory.hotbar[player.inventory.selected].id ~= nil then
         local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
         local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
