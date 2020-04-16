@@ -29,9 +29,10 @@ end
 
 function love.update(dt)
     player:update(dt)
-	lightworld:Update()
 	lightworld:SetPosition(player.x * 32 + (-love.graphics.getWidth() / 2), player.y * 32 + (-love.graphics.getHeight() / 2), 1)
 	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
+	lightworld:Update()
+	updateSliders()
 end
 
 function love.mousepressed(button, x, y)

@@ -128,6 +128,16 @@ function randWalkSpawn()
     end
 end
 
+function startGame(n)
+	if n == 1 then
+		closeMenu()
+	end
+end
+
 function initMenu()
+	sliders[#sliders] = newSlider(100, 100, 100, 0, 0, 1)
+end
+
+function updateSliders()
 	
 end
