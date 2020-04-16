@@ -1,4 +1,4 @@
-require 'globals'
+require "globals"
 require "utils"
 require "tiles"
 require "player"
@@ -6,7 +6,7 @@ require "mapGenerator"
 require "drawables"
 require "commands"
 
-lightworld:SetColor(0, 0, 0)
+lightworld:SetColor(127, 127, 127)
 
 function love.load()
     chatTexts = {}
@@ -18,6 +18,7 @@ function love.load()
     --generateMap()
     randWalkMap(1000)
     fillHolesAndSetWalls()
+	generateMapLighting()
     --exampleMap()
 	atlasBatch = love.graphics.newSpriteBatch(loadImage("tiles", "atlas"), 2000)
 	fillSpriteBatch(atlasBatch, tileMap)
@@ -27,14 +28,14 @@ function love.update(dt)
     player:update(dt)
 	lightworld:Update()
 	lightworld:SetPosition(player.x * 32 + (-love.graphics.getWidth() / 2), player.y * 32 + (-love.graphics.getHeight() / 2), 1)
-	playerLight:SetPosition((player.x * 32), (player.y * 32))
+	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
 end
 
 function love.mousepressed(button, x, y)
 
 end
 function love.textinput(t)
-    if player.chatOpen == true then
+    if player.chatOpen then
         local tmp = love.graphics.newText(love.graphics.newFont(16), player.chatWrite .. t)
         if tmp:getWidth() < 500 then
             player.chatWrite = player.chatWrite .. t

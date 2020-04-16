@@ -13,6 +13,18 @@ tiles["brickWall"] = {
 	offset = 1
 }
 
+tiles["lightFloor"] = {
+    id = "lightFloor",
+        solid = false,
+    emit = true,
+    emitStrength = 32,
+    emitColor = {
+        r = 255,
+        g = 255,
+        b = 255
+    }
+}
+
 function fillSpriteBatch(sb, tileMap)
     for k, v in pairs(tileMap) do
         local coords = split(k, " ")
