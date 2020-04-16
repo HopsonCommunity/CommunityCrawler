@@ -33,7 +33,7 @@ function love.mousepressed(button, x, y)
 
 end
 function love.textinput(t)
-    if player.chatOpen == true then
+    if player.chatOpen then
         local tmp = love.graphics.newText(love.graphics.newFont(16), player.chatWrite .. t)
         if tmp:getWidth() < 500 then
             player.chatWrite = player.chatWrite .. t
