@@ -228,7 +228,11 @@ function addProps()
     for y = topY - 1, bottomY + 1 do
         for x = leftX - 1, rightX + 1 do
             if tileMap[x .. " " .. y] ~= nil and tileMap[x .. " ".. y].id == "brickFloor" and math.random(0, 50) == 1 then
-                tileMap[x .. " " .. y] = tiles["crate"]
+                local crate = Prop()
+                crate:load("crate")
+                crate.x = x
+                crate.y = y
+                table.insert(entities, crate)
             end
         end
     end

@@ -19,5 +19,6 @@ worldShadows = {}
 worldLights = {}
 sliders = {}
 projectiles = {}
+entities = {}
 chatTexts = {}
 atlasOffsets = {}

@@ -3,6 +3,7 @@ Entity = class:new()
 
 Entity.x = 1
 Entity.y = 1
+Entity.id = "entity"
 Entity.health = 100
 Entity.maxHealth = 100
 Entity.xVelocity = 0
@@ -10,12 +11,20 @@ Entity.yVelocity = 0
 Entity.entitySpeed = 64
 Entity.entityAcceleration = 4
 Entity.friction = 0.8
-Entity.texture = loadImage("entities", "player_modelDefault")
-Entity.animations = {
-    idle = nim.newAnim(Entity.texture, 32, 64, 1, 1),
-    running = nim.newAnim(Entity.texture, 32, 64, 1, 2)
-}
-Entity.currentAnimation = Entity.animations.idle
+function Entity:loadAnim()
+    self.texture = loadImage(self.type, self.id)
+    if self.type == "entities" then
+        self.animations = {
+            idle = nim.newAnim(self.texture, 32, 64, 1, 1),
+            running = nim.newAnim(self.texture, 32, 64, 1, 2)
+        }
+    else
+        self.animations = {
+            idle = nim.newAnim(self.texture, 32, 32, 1, 1),
+        }
+    end
+    self.currentAnimation = self.animations.idle
+end
 function Entity:load()
 end
 

@@ -2,7 +2,11 @@ require "full"
 Player = class:new()
 Player:addparent(Entity)
 
+Player.id = "player"
+Player.type = "entities"
 function Player:load()
+    self.id = "player"
+    self:loadAnim()
     self.name = "Player1"
     self.debugMode = false
     self.controls = {}

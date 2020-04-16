@@ -4,6 +4,7 @@ require "tiles"
 require "item"
 require "inventory"
 require "entity"
+require "prop"
 require "player"
 require "mapGenerator"
 require "drawables"
@@ -15,7 +16,6 @@ lightworld:SetColor(127, 127, 127)
 function love.load()
     player = Player()
     player:load()
-
     --math.randomseed(os.clock())
     math.randomseed(1337)
     --generateMap()
@@ -154,6 +154,9 @@ function love.draw()
 	love.graphics.translate(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
 	local flip = player.facing == "left"
     nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
+    for k, v in pairs(entities) do
+        nim.drawAnim(v.currentAnimation, v.x * 32, v.y * 32)
+    end
 	if player.inventory.hotbar[player.inventory.selected].id ~= nil then
         local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
         local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
