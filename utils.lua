@@ -141,3 +141,19 @@ end
 function updateSliders()
 	
 end
+
+function updateProjectiles()
+	local dt = love.timer.getDelta()
+	for k, v in pairs(projectiles) do
+		v:update(dt)
+		v.lifespan = v.lifespan - dt * 60
+		if v.lifespan <= 0 then
+			v = nil
+			projectiles[k] = nil
+		else
+			local val = 1
+			if v.facing == "left" then val = -1 end
+			love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
+		end
+    end
+end

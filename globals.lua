@@ -18,3 +18,5 @@ playerLight = Light:new(lightworld, 512)
 worldShadows = {}
 worldLights = {}
 sliders = {}
+projectiles = {}
+chatTexts = {}

@@ -12,7 +12,6 @@ require "projectile"
 lightworld:SetColor(127, 127, 127)
 
 function love.load()
-    chatTexts = {}
     player = Player()
     player:load()
 
@@ -28,7 +27,7 @@ function love.load()
 	findSpawn()
 	randWalkSpawn()
 	initMenu()
-    projectileList = {}
+    luger = loadImage("items", "luger")
 end
 
 function love.update(dt)
@@ -39,9 +38,6 @@ function love.update(dt)
 	updateSliders()
 end
 
-function love.mousepressed(button, x, y)
-
-end
 function love.textinput(t)
     if player.chatOpen then
         local tmp = love.graphics.newText(love.graphics.newFont(16), player.chatWrite .. t)
@@ -86,7 +82,7 @@ end
 
 function love.wheelmoved(x, y)
     if y < 0 then
-        if player.inventory.selected < len(player.inventory.hotbar) then
+        if player.inventory.selected < #player.inventory.hotbar then
             player.inventory.selected = player.inventory.selected + 1
         else player.inventory.selected = 1
         end
@@ -94,7 +90,7 @@ function love.wheelmoved(x, y)
     if y > 0 then
         if player.inventory.selected > 1 then
             player.inventory.selected = player.inventory.selected - 1
-        else player.inventory.selected = len(player.inventory.hotbar)
+        else player.inventory.selected = #player.inventory.hotbar
         end
     end
 end
@@ -103,18 +99,22 @@ function love.mousepressed(x, y, button, isTouch)
     if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" then
         local newProjectile = Projectile()
         newProjectile:load()
-        newProjectile.x = player.x * 32
         newProjectile.y = player.y * 32
         local opp = y - love.graphics.getHeight()/2 - player.y
         local adj = x - love.graphics.getWidth()/2 - player.x
         local hyp = math.sqrt(opp * opp + adj * adj)
         local ang = math.asin(opp / hyp)
         if player.facing == "left" then
+			newProjectile.x = player.x * 32 - math.cos(ang) * 24 - math.max(math.sin(ang), 0) * 24
             ang = ang * -1
             newProjectile.facing = "left"
-        end
+			ang = ang - math.rad(90)
+        else
+			newProjectile.x = (player.x + 1) * 32 + math.cos(ang) * 24 + math.max(math.sin(ang), 0) * 24
+			ang = ang + math.rad(90)
+		end
         newProjectile.angle = ang
-        table.insert(projectileList, newProjectile)
+        table.insert(projectiles, newProjectile)
     end
 end
 
@@ -136,27 +136,16 @@ function love.draw()
 
     local flip = player.facing == "left"
     nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
-    for k, v in pairs(projectileList) do
-
-        v.lifespan = v.lifespan - 1
-        if v.lifespan <= 0 then
-            v = nil
-            projectileList[k] = nil
-        else
-            local val = 1
-            if v.facing == "left" then val = -1 end
-            love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
-        end
-    end
+	updateProjectiles()
     if player.inventory.hotbar[player.inventory.selected].id ~= nil then
         local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
         local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
         local hyp = math.sqrt(opp * opp + adj * adj)
         local f = 1
         if flip then f = -1 end
-        local gunPos = 24
-        if f == -1 then gunPos = 8 end
-        love.graphics.draw(player.inventory.hotbar[player.inventory.selected].texture, player.x * 32 + gunPos, player.y * 32, f*math.asin(opp / hyp), f, 1)
+        local gunPos = 48
+        if f == -1 then gunPos = -8 end
+        love.graphics.draw(player.inventory.hotbar[player.inventory.selected].texture, player.x * 32 + gunPos, player.y * 32 + 16, f*math.asin(opp / hyp), f, 1, 16, 16)
     end
 
     love.graphics.reset()
