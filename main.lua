@@ -112,12 +112,13 @@ function love.mousepressed(x, y, button, isTouch)
 			local hyp = math.sqrt(opp * opp + adj * adj)
 			local ang = math.asin(opp / hyp)
 			if player.facing == "left" then
-				newProjectile.x = player.x * 32 - math.cos(ang) * 24 - math.max(math.sin(ang), 0) * 24
+				newProjectile.x = player.x * 32 - math.cos(ang) * 24 - math.max(math.cos(-ang), 0) * 24
 				ang = ang * -1
-				newProjectile.facing = "left"
 				ang = ang - math.rad(90)
+				newProjectile.y = newProjectile.y + 17
 			else
-				newProjectile.x = (player.x + 1) * 32 + math.cos(ang) * 24 + math.max(math.sin(ang), 0) * 24
+				newProjectile.x = (player.x + 1) * 32 + math.cos(ang) * 24 + math.max(math.cos(ang), 0) * 24
+				newProjectile.y = newProjectile.y + 3
 				ang = ang + math.rad(90)
 			end
 			if player.inventory.hotbar[player.inventory.selected].spread then ang = ang + math.rad(math.random(player.inventory.hotbar[player.inventory.selected].spread * 2) - player.inventory.hotbar[player.inventory.selected].spread) end
@@ -144,10 +145,15 @@ function love.draw()
 	--]]
 	love.graphics.draw(atlasBatch)
 
-    local flip = player.facing == "left"
-    nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
 	updateProjectiles()
-    if player.inventory.hotbar[player.inventory.selected].id ~= nil then
+
+    love.graphics.reset()
+	lightworld:Draw()
+	
+	love.graphics.translate(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
+	local flip = player.facing == "left"
+    nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
+	if player.inventory.hotbar[player.inventory.selected].id ~= nil then
         local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
         local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
         local hyp = math.sqrt(opp * opp + adj * adj)
@@ -157,10 +163,8 @@ function love.draw()
         if f == -1 then gunPos = -8 end
         love.graphics.draw(player.inventory.hotbar[player.inventory.selected].texture, player.x * 32 + gunPos, player.y * 32 + 16, f*math.asin(opp / hyp), f, 1, 16, 16)
     end
-
-    love.graphics.reset()
-	lightworld:Draw()
-
+	love.graphics.reset()
+	
     love.graphics.draw(player.healthBar, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 32)
     local HPPerc = (1 - (player.health / player.maxHealth)) * 96
     local HPQuad = love.graphics.newQuad(0, HPPerc, 96, 96, player.healthImage:getDimensions())

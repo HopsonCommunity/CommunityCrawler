@@ -18,10 +18,10 @@ function drawChat()
     local font = love.graphics.newFont(16)
     love.graphics.setFont(font)
     love.graphics.setColor(1, 1, 1, 0.3)
-    love.graphics.rectangle("fill", 16, love.graphics.getHeight() - 32, 500, 20)
+    love.graphics.rectangle("fill", 16, love.graphics.getHeight() - 32, 320, 20)
 
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(player.chatWrite, 16, love.graphics.getHeight() - 32, 500, "left")
+    love.graphics.printf(player.chatWrite, 16, love.graphics.getHeight() - 32, 320, "left")
 
     local font = love.graphics.newFont(14)
     love.graphics.setFont(font)
@@ -31,12 +31,12 @@ function drawWholeChat()
     local font = love.graphics.newFont(16)
     love.graphics.setFont(font)
     love.graphics.setColor(1, 1, 1, 0.05)
-    love.graphics.rectangle("fill", 16, love.graphics.getHeight() - 432, 500, 400)
+    love.graphics.rectangle("fill", 16, love.graphics.getHeight() - 432, 320, 400)
 
     love.graphics.setColor(1, 1, 1)
     local len = len(chatTexts)
     for text = 1, len do
-        love.graphics.printf(chatTexts[len - text + 1], 16, love.graphics.getHeight() - (text) * 18 - 32, 500, "left")
+        love.graphics.printf(chatTexts[len - text + 1], 16, love.graphics.getHeight() - (text) * 18 - 32, 320, "left")
     end
 
     local font = love.graphics.newFont(14)
