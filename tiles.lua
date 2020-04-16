@@ -12,6 +12,12 @@ tiles["brickWall"] = {
     texture = loadImage("tiles", "brickWall"),
 	offset = 1
 }
+tiles["crate"] = {
+    id = "crate",
+    solid = true,
+    texture = loadImage("tiles", "crate"),
+	offset = 1
+}
 
 tiles["lightFloor"] = {
     id = "lightFloor",
