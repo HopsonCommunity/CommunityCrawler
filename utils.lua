@@ -92,3 +92,43 @@ local f = false
 		if f then break end
 	end
 end
+
+function randWalkSpawn()
+    local pos = {x = 0, y = 0}
+
+    while true do
+
+        if tileMap[pos.x .. " " .. pos.y] ~= nil and not tileMap[pos.x .. " " .. pos.y].solid then
+            player.x = pos.x
+            player.y = pos.y
+            break
+        end
+
+        while true do
+            local dir = math.random(1, 4)
+
+            if dir == 1 then
+                if tileMap[pos.x + 1 .. " " .. pos.y] ~= nil then
+                    pos = {x = pos.x + 1, y = pos.y}
+                    break
+                end
+            elseif dir == 2 then
+                if tileMap[pos.x - 1 .. " " .. pos.y] ~= nil then
+                    pos = {x = pos.x - 1, y = pos.y}
+                    break
+                end
+            elseif dir == 3 then
+                if tileMap[pos.x .. " " .. pos.y + 1] ~= nil then
+                    pos = {x = pos.x, y = pos.y + 1}
+                    break
+                end
+            elseif dir == 4 then
+                if tileMap[pos.x .. " " .. pos.y - 1] ~= nil then
+                    pos = {x = pos.x, y = pos.y - 1}
+                    break
+                end
+            end
+        end
+
+    end
+end
