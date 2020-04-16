@@ -15,3 +15,4 @@ lightworld = LightWorld:new()
 shadowshapes = Body:new(lightworld)
 playerLight = Light:new(lightworld, 512)
 worldShadows = {}
+worldLights = {}

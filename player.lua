@@ -22,6 +22,10 @@ function Player:load()
     self.controls["debug"] = "f3"
     self.facing = "right"
     self.animation = nim.newAnim(self.texture, 32, 64, 1)
+    self.healthBar = loadImage("GUI", "healthBar")
+    self.healthImage = loadImage("GUI", "health")
+    self.chatOpen = false
+    self.chatWrite = ""
 end
 
 function Player:hurt(dmg)
@@ -32,23 +36,10 @@ function Player:heal(hp)
 end
 
 function Player:input(dt)
-    if love.keyboard.isDown(self.controls["right"]) then
-        self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed)
-        self.facing = "right"
-    end
-    if love.keyboard.isDown(self.controls["left"])  then
-        self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed)
-        self.facing = "left"
-    end
-    if love.keyboard.isDown(self.controls["down"])  then
-        self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed)
-    end
-    if love.keyboard.isDown(self.controls["up"])    then
-        self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed)
-    end
-    if love.keyboard.isDown(self.controls["debug"]) then
-        self.debugMode = not self.debugMode
-    end
+    if love.keyboard.isDown(self.controls["right"]) then self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed) end
+    if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed) end
+    if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed) end
+    if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed) end
 end
 
 function Player:move(dt)
@@ -83,6 +74,7 @@ function Player:move(dt)
 end
 
 function Player:update(dt)
+    if love.mouse.getX() < love.graphics.getWidth()/2 then self.facing = "left" else self.facing = "right" end
     self:input(dt)
     self:move(dt)
 	self.animation:update(dt)

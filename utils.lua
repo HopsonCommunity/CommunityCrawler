@@ -66,6 +66,14 @@ function generateMapLighting()
 			else
 				table.insert(worldShadows, PolygonShadow:new(shadowshapes, (coords[1] * 32)+0, (coords[2] * 32)+0, (coords[1] * 32)+32, (coords[2] * 32)+0, (coords[1] * 32)+32, (coords[2] * 32)+32, (coords[1] * 32)+0, (coords[2] * 32)+32))
 			end
+		elseif v.emit then
+			table.insert(worldLights, Light:new(lightworld, v.emitStrength or 32))
+			worldLights[#worldLights]:SetPosition(coords[1] * 32 + 16, coords[2] * 32 + 16)
+			if v.emitColor == nil then
+				worldLights[#worldLights]:SetColor(255, 255, 255)
+			else
+				worldLights[#worldLights]:SetColor(v.emitColor.r or 0, v.emitColor.g or 0, v.emitColor.b or 0)
+			end
 		end
     end
 end
