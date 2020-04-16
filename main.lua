@@ -59,7 +59,7 @@ function love.keypressed(key, scancode, isrepeat)
         if love.keyboard.isDown("lctrl") and key == "v" and tmp:getWidth() < 500 then
             player.chatWrite = player.chatWrite .. love.system.getClipboardText()
         elseif key == "backspace" then player.chatWrite = string.sub(player.chatWrite, 1, string.len(player.chatWrite)-1) end
-    end
+    elseif key == player.controls["debug"] then player.debugMode = not player.debugMode end
     if (key == "return" or key == "kpenter") and player.chatOpen == false then
         player.chatOpen = true
     end

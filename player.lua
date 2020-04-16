@@ -40,7 +40,6 @@ function Player:input(dt)
     if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed) end
     if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed) end
     if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed) end
-    if love.keyboard.isDown(self.controls["debug"]) then self.debugMode = not self.debugMode end
 end
 
 function Player:move(dt)
