@@ -22,6 +22,7 @@ function love.load()
     --exampleMap()
 	atlasBatch = love.graphics.newSpriteBatch(loadImage("tiles", "atlas"), 2000)
 	fillSpriteBatch(atlasBatch, tileMap)
+	findSpawn()
 end
 
 function love.update(dt)

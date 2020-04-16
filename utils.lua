@@ -77,3 +77,18 @@ function generateMapLighting()
 		end
     end
 end
+
+function findSpawn()
+	local f
+    for y = topY - 1, bottomY + 1 do
+        for x = leftX - 1, rightX + 1 do
+            if tileMap[x .. " " .. y] ~= nil and not tileMap[x .. " " .. y].solid then
+                player.x = x
+                player.y = y
+				f = true
+				break
+            end
+        end
+		if f then break end
+    end
+end
