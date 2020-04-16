@@ -6,7 +6,7 @@ function evalCommands(cmd)
     for w in cmd:gmatch("%S+") do table.insert(cmds, w) end
 
     if cmds[1] == "debug" then
-        if debugMode then debugMode = false else debugMode = true end
+        if player.debugMode then player.debugMode = false else player.debugMode = true end
         return
     end
 
