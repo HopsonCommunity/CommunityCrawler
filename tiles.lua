@@ -16,7 +16,7 @@ tiles["crate"] = {
     id = "crate",
     solid = true,
     texture = loadImage("tiles", "crate"),
-	offset = 1
+	offset = 2
 }
 
 tiles["lightFloor"] = {

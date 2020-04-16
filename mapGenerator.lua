@@ -224,6 +224,16 @@ function fillHolesAndSetWalls()
     end
 end
 
+function addProps()
+    for y = topY - 1, bottomY + 1 do
+        for x = leftX - 1, rightX + 1 do
+            if tileMap[x .. " " .. y] ~= nil and tileMap[x .. " ".. y].id == "brickFloor" and math.random(0, 50) == 1 then
+                tileMap[x .. " " .. y] = tiles["crate"]
+            end
+        end
+    end
+end
+
 function exampleMap()
     generateRoom(0, 0, 50, 50)
     for x = 20, 30 do

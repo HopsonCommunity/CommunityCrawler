@@ -21,6 +21,7 @@ function love.load()
     --generateMap()
     randWalkMap(1337)
     fillHolesAndSetWalls()
+    addProps()
 	generateMapLighting()
     --exampleMap()
 	atlasBatch = love.graphics.newSpriteBatch(loadImage("tiles", "atlas"), 2000)
@@ -149,7 +150,7 @@ function love.draw()
 
     love.graphics.reset()
 	lightworld:Draw()
-	
+
 	love.graphics.translate(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
 	local flip = player.facing == "left"
     nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
@@ -164,7 +165,7 @@ function love.draw()
         love.graphics.draw(player.inventory.hotbar[player.inventory.selected].texture, player.x * 32 + gunPos, player.y * 32 + 16, f*math.asin(opp / hyp), f, 1, 16, 16)
     end
 	love.graphics.reset()
-	
+
     love.graphics.draw(player.healthBar, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 32)
     local HPPerc = (1 - (player.health / player.maxHealth)) * 96
     local HPQuad = love.graphics.newQuad(0, HPPerc, 96, 96, player.healthImage:getDimensions())
