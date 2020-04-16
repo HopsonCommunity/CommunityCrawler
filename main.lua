@@ -29,7 +29,7 @@ end
 
 function love.update(dt)
     player:update(dt)
-	lightworld:SetPosition(player.x * 32 + (-love.graphics.getWidth() / 2), player.y * 32 + (-love.graphics.getHeight() / 2), 1)
+	lightworld:SetPosition((player.x + 0.5) * 32 + (-love.graphics.getWidth() / 2), player.y * 32 + (-love.graphics.getHeight() / 2), 1)
 	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
 	lightworld:Update()
 	updateSliders()
@@ -82,7 +82,7 @@ function love.draw()
 
 
     love.graphics.setBackgroundColor(0, 0, 0)
-    love.graphics.translate(-player.x * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
+    love.graphics.translate(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
 
 	--[[
     for k, v in pairs(tileMap) do
