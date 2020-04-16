@@ -21,7 +21,11 @@ function Player:load()
     self.controls["down"] = "s"
     self.controls["debug"] = "f3"
     self.facing = "right"
-    self.animation = nim.newAnim(self.texture, 32, 64, 1)
+    self.animations = {
+        idle = nim.newAnim(self.texture, 32, 64, 1, 1),
+        running = nim.newAnim(self.texture, 32, 64, 1, 2)
+    }
+    self.currentAnimation = self.animations.idle
     self.healthBar = loadImage("GUI", "healthBar")
     self.healthImage = loadImage("GUI", "health")
     self.chatOpen = false
@@ -49,6 +53,10 @@ end
 function Player:move(dt)
     self.xVelocity = self.xVelocity * self.friction
     self.yVelocity = self.yVelocity * self.friction
+
+    if math.abs(self.xVelocity) < 0.001 then self.xVelocity = 0 end
+    if math.abs(self.yVelocity) < 0.001 then self.yVelocity = 0 end
+    
     local pushValue = 1/32
     local mv = {}
 
@@ -81,5 +89,12 @@ function Player:update(dt)
     if love.mouse.getX() < love.graphics.getWidth()/2 then self.facing = "left" else self.facing = "right" end
     self:input(dt)
     self:move(dt)
-	self.animation:update(dt)
+    
+    if self.xVelocity ~= 0 or self.yVelocity ~= 0 then
+        self.currentAnimation = self.animations.running
+    else
+        self.currentAnimation = self.animations.idle
+    end
+
+    self.currentAnimation:update(dt)
 end

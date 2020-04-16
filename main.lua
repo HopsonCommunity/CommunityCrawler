@@ -135,7 +135,7 @@ function love.draw()
 	love.graphics.draw(atlasBatch)
 
     local flip = player.facing == "left"
-    nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32, 90, flip)
+    nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
     for k, v in pairs(projectileList) do
 
         v.lifespan = v.lifespan - 1
