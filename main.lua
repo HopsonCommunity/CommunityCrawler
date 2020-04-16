@@ -20,6 +20,8 @@ function love.load()
     fillHolesAndSetWalls()
 	generateMapLighting()
     --exampleMap()
+	atlasBatch = love.graphics.newSpriteBatch(loadImage("tiles", "atlas"), 2000)
+	fillSpriteBatch(atlasBatch, tileMap)
 end
 
 function love.update(dt)
@@ -76,10 +78,13 @@ function love.draw()
     love.graphics.setBackgroundColor(0, 0, 0)
     love.graphics.translate(-player.x * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
 
+	--[[
     for k, v in pairs(tileMap) do
         local coords = split(k, " ")
         love.graphics.draw(v.texture, coords[1] * 32, coords[2] * 32)
     end
+	--]]
+	love.graphics.draw(atlasBatch)
 
     local flip = player.facing == "left"
     nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32, 90, flip)

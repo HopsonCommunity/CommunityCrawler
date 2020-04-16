@@ -36,12 +36,12 @@ function Player:heal(hp)
 end
 
 function Player:input(dt)
-	if not player.chatOpen then
-		if love.keyboard.isDown(self.controls["right"]) then self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed) end
-		if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed) end
-		if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed) end
-		if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed) end
-	end
+    if not player.chatOpen then
+        if love.keyboard.isDown(self.controls["right"]) then self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed) end
+        if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed) end
+        if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed) end
+        if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed) end
+	  end
 end
 
 function Player:move(dt)
