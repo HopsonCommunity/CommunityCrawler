@@ -1,6 +1,7 @@
 require "globals"
 require "utils"
 require "tiles"
+require "item"
 require "inventory"
 require "player"
 require "mapGenerator"
@@ -27,7 +28,6 @@ function love.load()
 	findSpawn()
 	randWalkSpawn()
 	initMenu()
-    luger = loadImage("items", "luger")
     projectileList = {}
 end
 
@@ -100,7 +100,7 @@ function love.wheelmoved(x, y)
 end
 
 function love.mousepressed(x, y, button, isTouch)
-    if button == 1 and player.inventory.hotbar[player.inventory.selected] == "luger" then
+    if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" then
         local newProjectile = Projectile()
         newProjectile:load()
         newProjectile.x = player.x * 32
@@ -148,7 +148,7 @@ function love.draw()
             love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
         end
     end
-    if player.inventory.hotbar[player.inventory.selected] ~= "none" then
+    if player.inventory.hotbar[player.inventory.selected].id ~= nil then
         local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
         local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
         local hyp = math.sqrt(opp * opp + adj * adj)
@@ -156,7 +156,7 @@ function love.draw()
         if flip then f = -1 end
         local gunPos = 24
         if f == -1 then gunPos = 8 end
-        love.graphics.draw(luger, player.x * 32 + gunPos, player.y * 32, f*math.asin(opp / hyp), f, 1)
+        love.graphics.draw(player.inventory.hotbar[player.inventory.selected].texture, player.x * 32 + gunPos, player.y * 32, f*math.asin(opp / hyp), f, 1)
     end
 
     love.graphics.reset()

@@ -1,6 +1,6 @@
 inventory = {hotbar = {}, selected = 1}
 
-inventory.hotbar[1] = "luger"
+inventory.hotbar[1] = itemFactory("luger")
 inventory.hotbar[2] = "none"
 inventory.hotbar[3] = "none"
 inventory.hotbar[4] = "none"
@@ -35,19 +35,19 @@ function inventory.draw()
 end
 
 function inventory.drawItems()
-    if inventory.hotbar[1] ~= "none" then
-        love.graphics.draw(luger, love.graphics.getWidth()/2 - 48 - 48 - 48 - 5, love.graphics.getHeight() - 48 - 32 - 24 + 5)
+    if inventory.hotbar[1].id ~= nil then
+        love.graphics.draw(inventory.hotbar[1].texture, love.graphics.getWidth()/2 - 48 - 48 - 48 - 5 - 5 + 8, love.graphics.getHeight() - 48 - 32 - 24 + 8)
     end
 
-    if inventory.hotbar[2] ~= "none" then
-        love.graphics.draw(luger, love.graphics.getWidth()/2 - 48 - 48 - 5, love.graphics.getHeight() - 48 - 32 - 24)
+    if inventory.hotbar[2].id ~= nil then
+        love.graphics.draw(inventory.hotbar[2].texture, love.graphics.getWidth()/2 - 48 - 48 - 5 + 8, love.graphics.getHeight() - 48 - 32 - 24 + 8)
     end
 
-    if inventory.hotbar[3] ~= "none" then
-        love.graphics.draw(luger, love.graphics.getWidth()/2 + 48 + 5, love.graphics.getHeight() - 48 - 32 - 24)
+    if inventory.hotbar[3].id ~= nil then
+        love.graphics.draw(inventory.hotbar[3].texture, love.graphics.getWidth()/2 + 48 + 5 + 8, love.graphics.getHeight() - 48 - 32 - 24 + 8)
     end
 
-    if inventory.hotbar[4] ~= "none" then
-        love.graphics.draw(luger, love.graphics.getWidth()/2 + 48 + 48 + 5 + 5, love.graphics.getHeight() - 48 - 32 - 24)
+    if inventory.hotbar[4].id ~= nil then
+        love.graphics.draw(inventory.hotbar[4].texture, love.graphics.getWidth()/2 + 48 + 48 + 5 + 5 + 8, love.graphics.getHeight() - 48 - 32 - 24 + 8)
     end
 end
