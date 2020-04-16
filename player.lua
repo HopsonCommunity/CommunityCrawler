@@ -18,6 +18,7 @@ function Player:load()
     self.chatWrite = ""
     self.inventory = inventory
 	self.canMove = true
+	self.itemCooldown = 0
 end
 
 function Player:input(dt)

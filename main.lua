@@ -37,6 +37,7 @@ function love.update(dt)
 	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
 	lightworld:Update()
 	updateSliders()
+	player.itemCooldown = math.max(player.itemCooldown - dt, 0)
 end
 
 function love.textinput(t)
@@ -73,6 +74,9 @@ function love.keypressed(key, scancode, isrepeat)
     end
     if inList({ "1", "2", "3", "4", "0" }, key) then
         if key == "0" then key = "4" end
+		if tonumber(key) ~= player.inventory.selected then
+			if player.inventory.hotbar[player.inventory.selected].id ~= nil then player.itemCooldown = math.max(player.inventory.hotbar[player.inventory.selected].cooldown, 1) end
+		end
         player.inventory.selected = tonumber(key)
     end
     if key == "/" and player.chatOpen == false then
@@ -87,17 +91,19 @@ function love.wheelmoved(x, y)
             player.inventory.selected = player.inventory.selected + 1
         else player.inventory.selected = 1
         end
+		if player.inventory.hotbar[player.inventory.selected].id ~= nil then player.itemCooldown = math.max(player.inventory.hotbar[player.inventory.selected].cooldown, 1) end
     end
     if y > 0 then
         if player.inventory.selected > 1 then
             player.inventory.selected = player.inventory.selected - 1
         else player.inventory.selected = #player.inventory.hotbar
         end
+		if player.inventory.hotbar[player.inventory.selected].id ~= nil then player.itemCooldown = math.max(player.inventory.hotbar[player.inventory.selected].cooldown, 1) end
     end
 end
 
 function love.mousepressed(x, y, button, isTouch)
-    if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" then
+    if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" and player.itemCooldown == 0 then
 		for i=1,player.inventory.hotbar[player.inventory.selected].bulletNum do
 			local newProjectile = Projectile()
 			newProjectile:load()
@@ -119,6 +125,7 @@ function love.mousepressed(x, y, button, isTouch)
 			newProjectile.angle = ang
 			table.insert(projectiles, newProjectile)
 		end
+		player.itemCooldown = player.inventory.hotbar[player.inventory.selected].cooldown
     end
 end
 
