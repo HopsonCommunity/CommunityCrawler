@@ -3,7 +3,7 @@ tiles = {}
 tiles["brickFloor"] = {
     id = "brickFloor",
     solid = false,
-    texture = loadImage("tiles", "brickFloor"),
+    texture = loadImage("tiles", "brickFloor")
 }
 tiles["brickWall"] = {
     id = "brickWall",
