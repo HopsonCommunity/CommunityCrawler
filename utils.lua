@@ -53,7 +53,7 @@ end
 
 function generateMapLighting()
 	for k, v in pairs(tileMap) do
-        local coords = split(k, " ")
+	local coords = split(k, " ")
 		if v.solid then
 			local top = tileMap[coords[1] .. " " .. coords[2] - 1]
 			local bottom = tileMap[coords[1] .. " " .. coords[2] + 1]
@@ -75,20 +75,20 @@ function generateMapLighting()
 				worldLights[#worldLights]:SetColor(v.emitColor.r or 0, v.emitColor.g or 0, v.emitColor.b or 0)
 			end
 		end
-    end
+	end
 end
 
 function findSpawn()
-	local f
-    for y = topY - 1, bottomY + 1 do
-        for x = leftX - 1, rightX + 1 do
-            if tileMap[x .. " " .. y] ~= nil and not tileMap[x .. " " .. y].solid then
-                player.x = x
-                player.y = y
+local f = false
+	for y = topY + 5, bottomY do
+		for x = leftX + 1, rightX do
+			if tileMap[x .. " " .. y] ~= nil and not tileMap[x .. " " .. y].solid then
+				player.x = x
+				player.y = y
 				f = true
 				break
-            end
-        end
+			end
+		end
 		if f then break end
-    end
+	end
 end
