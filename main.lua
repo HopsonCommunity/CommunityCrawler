@@ -93,7 +93,7 @@ function love.draw()
 	love.graphics.draw(atlasBatch)
 
     local flip = player.facing == "left"
-    nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32, 90, flip)
+    nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
 
     local luger = loadImage("items", "luger")
     local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y

@@ -26,6 +26,31 @@ function nim.newAnim(image, width, height, duration)
     return animation
 end
 
+function nim.newAnim(image, width, height, duration, row)
+	if row < 1 then return end
+	
+    local animation = {}
+	local fim = image
+	fim:setFilter("nearest", "nearest")
+    animation.spriteSheet = fim
+    animation.quads = {}
+	animation.width = width
+	animation.height = height
+ 
+    for x = 0, fim:getWidth() - width, width do
+		table.insert(animation.quads, love.graphics.newQuad(x, (row-1) * height, width, height, fim:getDimensions()))
+	end
+ 
+    animation.duration = duration or 1
+    animation.currentTime = 0
+	function animation:update(t)
+		self.currentTime = (self.currentTime + t) % animation.duration
+		return self
+	end
+ 
+    return animation
+end
+
 function nim.drawAnim(anim, x, y, r, flip)
 	local spriteNum = math.floor(anim.currentTime / anim.duration * #anim.quads) + 1
 	if spriteNum < 1 then return end
