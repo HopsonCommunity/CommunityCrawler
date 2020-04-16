@@ -16,14 +16,14 @@ function love.load()
     --math.randomseed(os.clock())
     math.randomseed(1337)
     --generateMap()
-    randWalkMap(1337)
+    randWalkMap(1000)
     fillHolesAndSetWalls()
 	generateMapLighting()
     --exampleMap()
 	atlasBatch = love.graphics.newSpriteBatch(loadImage("tiles", "atlas"), 2000)
 	fillSpriteBatch(atlasBatch, tileMap)
-	--findSpawn()
-    randWalkSpawn()
+	findSpawn()
+	initMenu()
 end
 
 function love.update(dt)
@@ -48,6 +48,7 @@ end
 function love.keypressed(key, scancode, isrepeat)
     if player.chatOpen == true then
         if key == "return" or key == "kpenter" then
+			player.canMove = true
             player.chatOpen = false
             if string.sub(player.chatWrite, 1, 1) == "/" and string.len(player.chatWrite) > 1 then evalCommands(player.chatWrite) end
             if len(chatTexts) >= 22 then
@@ -65,6 +66,7 @@ function love.keypressed(key, scancode, isrepeat)
     elseif key == player.controls["debug"] then player.debugMode = not player.debugMode end
     if (key == "return" or key == "kpenter") and player.chatOpen == false then
         player.chatOpen = true
+		player.canMove = false
     end
     if key == "/" and player.chatOpen == false then
         player.chatOpen = true
@@ -102,12 +104,11 @@ function love.draw()
     love.graphics.draw(luger, player.x * 32 + gunPos, player.y * 32, f*math.asin(opp / hyp), f, 1)
 
     love.graphics.reset()
-    love.graphics.draw(player.healthBar, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 30)
+	lightworld:Draw()
+	love.graphics.draw(player.healthBar, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 30)
     local HPPerc = (1 - (player.health / player.maxHealth)) * 96
     local HPQuad = love.graphics.newQuad(0, HPPerc, 96, 96, player.healthImage:getDimensions())
     love.graphics.draw(player.healthImage, HPQuad, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 30 + HPPerc)
-	lightworld:Draw()
-
 
     drawWholeChat()
     if player.chatOpen == true then drawChat() end

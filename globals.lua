@@ -4,6 +4,7 @@ LightWorld = require("shadows.LightWorld")
 PolygonShadow = require("shadows.ShadowShapes.PolygonShadow")
 Light = require("shadows.Light")
 Body = require("shadows.Body")
+require "simple-slider"
 tileMap = {}
 leftX = 0
 rightX = 0
@@ -16,3 +17,4 @@ shadowshapes = Body:new(lightworld)
 playerLight = Light:new(lightworld, 512)
 worldShadows = {}
 worldLights = {}
+sliders = {}

@@ -26,6 +26,7 @@ function Player:load()
     self.healthImage = loadImage("GUI", "health")
     self.chatOpen = false
     self.chatWrite = ""
+	self.canMove = true
 end
 
 function Player:hurt(dmg)
@@ -36,7 +37,7 @@ function Player:heal(hp)
 end
 
 function Player:input(dt)
-    if not player.chatOpen then
+    if player.canMove then
         if love.keyboard.isDown(self.controls["right"]) then self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed) end
         if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed) end
         if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed) end
