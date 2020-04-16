@@ -30,6 +30,7 @@ function Player:load()
     self.healthImage = loadImage("GUI", "health")
     self.chatOpen = false
     self.chatWrite = ""
+    self.inventory = inventory
 	self.canMove = true
 end
 

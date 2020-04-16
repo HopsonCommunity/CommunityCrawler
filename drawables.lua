@@ -2,8 +2,7 @@ function drawDebug()
 
     love.graphics.translate(-player.x * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
 
-    love.graphics.print("Mouse Position:   X: " .. love.mouse.getX() .. "   Y: " .. love.mouse.getY(), player.x * 32, player.y * 32 - 128)
-    love.graphics.print("Player Position:   X: " .. player.x .. "   Y: " .. player.y, player.x * 32, player.y * 32 - 64)
+    love.graphics.print(player.xVelocity .. " " .. player.yVelocity, player.x * 32, player.y * 32 - 64)
     love.graphics.print(player.x .. " " .. player.y, player.x * 32, player.y * 32 - 32)
     love.graphics.print(leftX .. " " .. topY, leftX * 32, topY * 32)
     love.graphics.print(rightX .. " " .. bottomY, rightX * 32, bottomY * 32)
