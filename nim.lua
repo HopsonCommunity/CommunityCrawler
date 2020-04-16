@@ -120,7 +120,6 @@ function nim.updateParticles(dt)
 	local rem = {}
 	for i, p in ipairs(particles) do
 		if p.f then
-			print(p.yv, p.y, p.y + (p.yv * dt), dt)
 			p.xv = p.xv * p.f
 		end
 		if p.g then
@@ -138,7 +137,7 @@ function nim.updateParticles(dt)
 	end
 end
 
-function nim.drawParticle()
+function nim.drawParticles()
 	local oc = {love.graphics.getColor()}
 	for i, p in ipairs(particles) do
 		local c = {}
