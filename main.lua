@@ -1,4 +1,4 @@
-require 'globals'
+require "globals"
 require "utils"
 require "tiles"
 require "player"
