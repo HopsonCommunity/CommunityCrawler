@@ -10,6 +10,16 @@ tiles["brickWall"] = {
     solid = true,
     texture = "brickWall"
 }
+tiles["halfWall"] = {
+    id = "halfWall",
+    solid = true,
+	lightHitbox = {
+		{x = 0, y = 0},
+		{x = 32, y = 0},
+		{x = 32, y = 16},
+		{x = 0, y = 16}
+	}
+}
 tiles["crate"] = {
     id = "crate",
     solid = true,

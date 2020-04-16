@@ -63,11 +63,29 @@ function generateMapLighting()
 			local left = tileMap[coords[1] - 1 .. " " .. coords[2]]
 			local right = tileMap[coords[1] + 1 .. " " .. coords[2]]
 			if top and bottom and left and right then
-				if not (top.solid and bottom.solid and left.solid and right.solid) then
-					table.insert(worldShadows, PolygonShadow:new(shadowshapes, (coords[1] * 32)+0, (coords[2] * 32)+0, (coords[1] * 32)+32, (coords[2] * 32)+0, (coords[1] * 32)+32, (coords[2] * 32)+32, (coords[1] * 32)+0, (coords[2] * 32)+32))
+				if not (top.solid and bottom.solid and left.solid and right.solid) or (top.lightHitbox or bottom.lightHitbox or left.lightHitbox or right.lightHitbox) then
+					if tileMap[coords[1] .. " " .. coords[2]].lightHitbox then
+						local vertices = {}
+						for i, v in ipairs(tileMap[coords[1] .. " " .. coords[2]].lightHitbox) do
+							table.insert(vertices, coords[1]*32 + v.x)
+							table.insert(vertices, coords[2]*32 + v.y)
+						end
+						table.insert(worldShadows, PolygonShadow:new(shadowshapes, unpack(vertices)))
+					else
+						table.insert(worldShadows, PolygonShadow:new(shadowshapes, (coords[1] * 32)+0, (coords[2] * 32), (coords[1] * 32)+32, (coords[2] * 32), (coords[1] * 32)+32, (coords[2] * 32)+32, (coords[1] * 32), (coords[2] * 32)+32))
+					end
 				end
 			else
-				table.insert(worldShadows, PolygonShadow:new(shadowshapes, (coords[1] * 32)+0, (coords[2] * 32)+0, (coords[1] * 32)+32, (coords[2] * 32)+0, (coords[1] * 32)+32, (coords[2] * 32)+32, (coords[1] * 32)+0, (coords[2] * 32)+32))
+				if tileMap[coords[1] .. " " .. coords[2]].lightHitbox then
+					local vertices = {}
+					for i, v in ipairs(tileMap[coords[1] .. " " .. coords[2]].lightHitbox) do
+						table.insert(vertices, coords[1]*32 + v.x)
+						table.insert(vertices, coords[2]*32 + v.y)
+					end
+					table.insert(worldShadows, PolygonShadow:new(shadowshapes, unpack(vertices)))
+				else
+					table.insert(worldShadows, PolygonShadow:new(shadowshapes, (coords[1] * 32)+0, (coords[2] * 32), (coords[1] * 32)+32, (coords[2] * 32), (coords[1] * 32)+32, (coords[2] * 32)+32, (coords[1] * 32), (coords[2] * 32)+32))
+				end
 			end
 		elseif v.emit then
 			table.insert(worldLights, Light:new(lightworld, v.emitStrength or 32))
