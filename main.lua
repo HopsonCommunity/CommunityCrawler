@@ -97,24 +97,27 @@ end
 
 function love.mousepressed(x, y, button, isTouch)
     if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" then
-        local newProjectile = Projectile()
-        newProjectile:load()
-        newProjectile.y = player.y * 32
-        local opp = y - love.graphics.getHeight()/2 - player.y
-        local adj = x - love.graphics.getWidth()/2 - player.x
-        local hyp = math.sqrt(opp * opp + adj * adj)
-        local ang = math.asin(opp / hyp)
-        if player.facing == "left" then
-			newProjectile.x = player.x * 32 - math.cos(ang) * 24 - math.max(math.sin(ang), 0) * 24
-            ang = ang * -1
-            newProjectile.facing = "left"
-			ang = ang - math.rad(90)
-        else
-			newProjectile.x = (player.x + 1) * 32 + math.cos(ang) * 24 + math.max(math.sin(ang), 0) * 24
-			ang = ang + math.rad(90)
+		for i=1,player.inventory.hotbar[player.inventory.selected].bulletNum do
+			local newProjectile = Projectile()
+			newProjectile:load()
+			newProjectile.y = player.y * 32
+			local opp = y - love.graphics.getHeight()/2 - player.y
+			local adj = x - love.graphics.getWidth()/2 - player.x
+			local hyp = math.sqrt(opp * opp + adj * adj)
+			local ang = math.asin(opp / hyp)
+			if player.facing == "left" then
+				newProjectile.x = player.x * 32 - math.cos(ang) * 24 - math.max(math.sin(ang), 0) * 24
+				ang = ang * -1
+				newProjectile.facing = "left"
+				ang = ang - math.rad(90)
+			else
+				newProjectile.x = (player.x + 1) * 32 + math.cos(ang) * 24 + math.max(math.sin(ang), 0) * 24
+				ang = ang + math.rad(90)
+			end
+			if player.inventory.hotbar[player.inventory.selected].spread then ang = ang + math.rad(math.random(player.inventory.hotbar[player.inventory.selected].spread * 2) - player.inventory.hotbar[player.inventory.selected].spread) end
+			newProjectile.angle = ang
+			table.insert(projectiles, newProjectile)
 		end
-        newProjectile.angle = ang
-        table.insert(projectiles, newProjectile)
     end
 end
 
