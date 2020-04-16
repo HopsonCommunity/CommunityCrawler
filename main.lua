@@ -1,6 +1,7 @@
 require "globals"
 require "utils"
 require "tiles"
+require "inventory"
 require "player"
 require "mapGenerator"
 require "drawables"
@@ -25,6 +26,7 @@ function love.load()
 	findSpawn()
 	randWalkSpawn()
 	initMenu()
+    luger = loadImage("items", "luger")
 end
 
 function love.update(dt)
@@ -70,10 +72,29 @@ function love.keypressed(key, scancode, isrepeat)
         player.chatOpen = true
 		player.canMove = false
     end
+    if inList({ "1", "2", "3", "4", "0" }, key) then
+        if key == "0" then key = "4" end
+        player.inventory.selected = tonumber(key)
+    end
     if key == "/" and player.chatOpen == false then
         player.chatOpen = true
     end
 
+end
+
+function love.wheelmoved(x, y)
+    if y < 0 then
+        if player.inventory.selected < len(player.inventory.hotbar) then
+            player.inventory.selected = player.inventory.selected + 1
+        else player.inventory.selected = 1
+        end
+    end
+    if y > 0 then
+        if player.inventory.selected > 1 then
+            player.inventory.selected = player.inventory.selected - 1
+        else player.inventory.selected = len(player.inventory.hotbar)
+        end
+    end
 end
 
 function love.draw()
@@ -95,22 +116,25 @@ function love.draw()
     local flip = player.facing == "left"
     nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32, 90, flip)
 
-    local luger = loadImage("items", "luger")
-    local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
-    local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
-    local hyp = math.sqrt(opp * opp + adj * adj)
-    local f = 1
-    if flip then f = -1 end
-    local gunPos = 24
-    if f == -1 then gunPos = 8 end
-    love.graphics.draw(luger, player.x * 32 + gunPos, player.y * 32, f*math.asin(opp / hyp), f, 1)
+    if player.inventory.hotbar[player.inventory.selected] ~= "none" then
+        local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
+        local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
+        local hyp = math.sqrt(opp * opp + adj * adj)
+        local f = 1
+        if flip then f = -1 end
+        local gunPos = 24
+        if f == -1 then gunPos = 8 end
+        love.graphics.draw(luger, player.x * 32 + gunPos, player.y * 32, f*math.asin(opp / hyp), f, 1)
+    end
 
     love.graphics.reset()
 	lightworld:Draw()
-	love.graphics.draw(player.healthBar, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 30)
+
+    love.graphics.draw(player.healthBar, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 32)
     local HPPerc = (1 - (player.health / player.maxHealth)) * 96
     local HPQuad = love.graphics.newQuad(0, HPPerc, 96, 96, player.healthImage:getDimensions())
-    love.graphics.draw(player.healthImage, HPQuad, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 30 + HPPerc)
+    love.graphics.draw(player.healthImage, HPQuad, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 32 + HPPerc)
+    player.inventory.draw()
 
     drawWholeChat()
     if player.chatOpen == true then drawChat() end
