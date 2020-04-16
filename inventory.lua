@@ -1,7 +1,7 @@
 inventory = {hotbar = {}, selected = 1}
 
 inventory.hotbar[1] = itemFactory("luger")
-inventory.hotbar[2] = "none"
+inventory.hotbar[2] = itemFactory("pocketShotgun")
 inventory.hotbar[3] = "none"
 inventory.hotbar[4] = "none"
 inventory.hotbarIcon = loadImage("GUI", "hotbarIcon")
