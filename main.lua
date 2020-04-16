@@ -6,6 +6,7 @@ require "player"
 require "mapGenerator"
 require "drawables"
 require "commands"
+require "projectile"
 
 lightworld:SetColor(127, 127, 127)
 
@@ -27,6 +28,7 @@ function love.load()
 	randWalkSpawn()
 	initMenu()
     luger = loadImage("items", "luger")
+    projectileList = {}
 end
 
 function love.update(dt)
@@ -97,6 +99,25 @@ function love.wheelmoved(x, y)
     end
 end
 
+function love.mousepressed(x, y, button, isTouch)
+    if button == 1 and player.inventory.hotbar[player.inventory.selected] == "luger" then
+        local newProjectile = Projectile()
+        newProjectile:load()
+        newProjectile.x = player.x * 32
+        newProjectile.y = player.y * 32
+        local opp = y - love.graphics.getHeight()/2 - player.y
+        local adj = x - love.graphics.getWidth()/2 - player.x
+        local hyp = math.sqrt(opp * opp + adj * adj)
+        local ang = math.asin(opp / hyp)
+        if player.facing == "left" then
+            ang = ang * -1
+            newProjectile.facing = "left"
+        end
+        newProjectile.angle = ang
+        table.insert(projectileList, newProjectile)
+    end
+end
+
 function love.draw()
     love.graphics.reset()
     love.graphics.push()
@@ -115,7 +136,18 @@ function love.draw()
 
     local flip = player.facing == "left"
     nim.drawAnim(player.animation, player.x * 32, (player.y - 1) * 32, 90, flip)
+    for k, v in pairs(projectileList) do
 
+        v.lifespan = v.lifespan - 1
+        if v.lifespan <= 0 then
+            v = nil
+            projectileList[k] = nil
+        else
+            local val = 1
+            if v.facing == "left" then val = -1 end
+            love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
+        end
+    end
     if player.inventory.hotbar[player.inventory.selected] ~= "none" then
         local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
         local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
