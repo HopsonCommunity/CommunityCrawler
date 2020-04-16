@@ -229,9 +229,9 @@ function addProps()
         for x = leftX - 1, rightX + 1 do
             if tileMap[x .. " " .. y] ~= nil and tileMap[x .. " ".. y].id == "brickFloor" and math.random(0, 50) == 1 then
                 local crate = Prop()
-                crate:load("crate")
-                crate.x = x
+				crate.x = x
                 crate.y = y
+                crate:load("crate")
                 table.insert(entities, crate)
             end
         end

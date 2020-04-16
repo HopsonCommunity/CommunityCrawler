@@ -11,6 +11,7 @@ Entity.yVelocity = 0
 Entity.entitySpeed = 64
 Entity.entityAcceleration = 4
 Entity.friction = 0.8
+Entity.shadow = {}
 function Entity:loadAnim()
     self.texture = loadImage(self.type, self.id)
     if self.type == "entities" then
@@ -24,6 +25,29 @@ function Entity:loadAnim()
         }
     end
     self.currentAnimation = self.animations.idle
+end
+function Entity:loadShadow()
+	if #self.shadow > 0 then
+		if self.shadowIndex then
+			error("You can't load multiple shadows for one entity.")
+		else
+			local vertices = {}
+			for i, v in ipairs(self.shadow) do
+				table.insert(vertices, self.x * 32 + v.x)
+				table.insert(vertices, self.y * 32 + v.y)
+			end
+			table.insert(worldShadows, PolygonShadow:new(shadowshapes, unpack(vertices)))
+			self.shadowIndex = #worldShadows
+		end
+	end
+end
+function Entity:unloadShadow(self)
+	if self.shadowIndex then
+		worldShadows[self.shadow.index]:Remove()
+		self.shadowIndex = nil
+	else
+		error("You can't remove a shadow that doesn't exist.")
+	end
 end
 function Entity:load()
 end
