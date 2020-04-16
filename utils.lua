@@ -8,6 +8,16 @@ function loadImage(dir, type)
     end
 end
 
+function loadImagedata(dir, type)
+    local loadedImage
+    if dir == nil then dir = "" end
+    if love.filesystem.getInfo("rsc/" .. dir .. "/" .. type .. ".png") then
+        return love.image.newImageData("rsc/" .. dir .. "/" .. type .. ".png")
+    else
+        return love.image.newImageData("rsc/missingTexture.png")
+    end
+end
+
 function round(n)
     if n % 1 >= 0.5 then
         if math.ceil(n) == 0 then return 0

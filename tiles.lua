@@ -41,7 +41,7 @@ tiles["lightFloor"] = {
 function generateAtlas()
 	local img = love.image.newImageData(3200, 32)
 	for i, v in ipairs(love.filesystem.getDirectoryItems("rsc/tiles")) do
-		local tadd = love.image.newImageData("rsc/tiles/" .. v)
+		local tadd = loadImagedata("tiles", v:sub(1,-5))
 		for x = 0, 31 do
 			for y = 0, 31 do
 				img:setPixel(x+((i-1)*32), y, tadd:getPixel(x, y))
