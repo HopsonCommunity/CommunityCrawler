@@ -3,25 +3,22 @@ tiles = {}
 tiles["brickFloor"] = {
     id = "brickFloor",
     solid = false,
-    texture = loadImage("tiles", "brickFloor"),
-	offset = 0
+    texture = "brickFloor"
 }
 tiles["brickWall"] = {
     id = "brickWall",
     solid = true,
-    texture = loadImage("tiles", "brickWall"),
-	offset = 1
+    texture = "brickWall"
 }
 tiles["crate"] = {
     id = "crate",
     solid = true,
-    texture = loadImage("tiles", "crate"),
-	offset = 2
+    texture = "crate"
 }
 
 tiles["lightFloor"] = {
     id = "lightFloor",
-        solid = false,
+    solid = false,
     emit = true,
     emitStrength = 32,
     emitColor = {
@@ -31,11 +28,25 @@ tiles["lightFloor"] = {
     }
 }
 
+function generateAtlas()
+	local img = love.image.newImageData(3200, 32)
+	for i, v in ipairs(love.filesystem.getDirectoryItems("rsc/tiles")) do
+		local tadd = love.image.newImageData("rsc/tiles/" .. v)
+		for x = 0, 31 do
+			for y = 0, 31 do
+				img:setPixel(x+((i-1)*32), y, tadd:getPixel(x, y))
+			end
+		end
+		atlasOffsets[v:sub(1,-5)] = i - 1
+	end
+	return love.graphics.newImage(img)
+end
+
 function fillSpriteBatch(sb, tileMap)
     for k, v in pairs(tileMap) do
         local coords = split(k, " ")
-		local row, col = math.floor(v.offset / 100), v.offset % 100
-		local quad = love.graphics.newQuad(col * 32, row * 32, 32, 32, 3200, 3200)
+		local col = atlasOffsets[v.texture]
+		local quad = love.graphics.newQuad(col * 32, 0, 32, 32, 3200, 32)
 		sb:add(quad, coords[1] * 32, coords[2] * 32)
     end
 end

@@ -20,3 +20,4 @@ worldLights = {}
 sliders = {}
 projectiles = {}
 chatTexts = {}
+atlasOffsets = {}
