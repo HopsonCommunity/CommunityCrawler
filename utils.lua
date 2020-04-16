@@ -9,7 +9,10 @@ function loadImage(dir, type)
 end
 
 function round(n)
-    return n % 1 >= 0.5 and math.ceil(n) or math.floor(n)
+    if n % 1 >= 0.5 then
+        if math.ceil(n) == 0 then return 0
+        else return math.ceil(n) end
+    else return math.floor(n) end
 end
 
 function len(T)
@@ -139,7 +142,7 @@ function initMenu()
 end
 
 function updateSliders()
-	
+
 end
 
 function updateProjectiles()

@@ -28,7 +28,6 @@ function love.load()
 	findSpawn()
 	randWalkSpawn()
 	initMenu()
-    luger = loadImage("items", "luger")
 end
 
 function love.update(dt)

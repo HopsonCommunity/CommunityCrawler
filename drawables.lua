@@ -12,7 +12,6 @@ function drawDebug()
 
     love.graphics.print("FPS: " .. love.timer.getFPS(), 0, 0)
     love.graphics.print("Map Size:   X: " .. math.abs(leftX) + math.abs(rightX) .. "   Y:" .. math.abs(topY) + math.abs(bottomY), 0, 16)
-
 end
 
 function drawChat()
