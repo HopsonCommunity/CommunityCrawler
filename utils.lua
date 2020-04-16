@@ -124,14 +124,16 @@ function findSpawn()
 	end
 end
 
-function randWalkSpawn()
+function randWalkSpawn(entity, move)
     local pos = {x = 0, y = 0}
+    local moved = 0
     while true do
-        if tileMap[pos.x .. " " .. pos.y] ~= nil and not tileMap[pos.x .. " " .. pos.y].solid then
-            player.x = pos.x
-            player.y = pos.y
+        if tileMap[pos.x .. " " .. pos.y] ~= nil and not tileMap[pos.x .. " " .. pos.y].solid and moved > move then
+            entity.x = pos.x
+            entity.y = pos.y
             break
         end
+        moved = moved + 1
         while true do
             local dir = math.random(1, 4)
             if dir == 1 then

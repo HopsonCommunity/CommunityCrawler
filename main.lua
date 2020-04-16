@@ -26,13 +26,21 @@ function love.load()
     --exampleMap()
 	atlasBatch = love.graphics.newSpriteBatch(generateAtlas(), 2000)
 	fillSpriteBatch(atlasBatch, tileMap)
-	findSpawn()
-	randWalkSpawn()
+	randWalkSpawn(player, 20)
+    for entity = 0, 10 do
+        local zombie = entityFactory("zombie")
+        zombie:load()
+        randWalkSpawn(zombie, 20)
+        table.insert(entities, zombie)
+    end
 	initMenu()
 end
 
 function love.update(dt)
     player:update(dt)
+    for k, v in pairs(entities) do
+        v:update(dt)
+    end
 	lightworld:SetPosition((player.x + 0.5) * 32 + (-love.graphics.getWidth() / 2), player.y * 32 + (-love.graphics.getHeight() / 2), 1)
 	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
 	lightworld:Update()

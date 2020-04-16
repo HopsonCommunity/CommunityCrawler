@@ -4,6 +4,7 @@ Entity = class:new()
 Entity.x = 1
 Entity.y = 1
 Entity.id = "entity"
+Entity.type = "entities"
 Entity.health = 100
 Entity.maxHealth = 100
 Entity.xVelocity = 0
@@ -12,12 +13,19 @@ Entity.entitySpeed = 64
 Entity.entityAcceleration = 4
 Entity.friction = 0.8
 Entity.shadow = {}
+Entity.hostile = false
+Entity.animFrames = 4
+
+function Entity:load()
+    self:loadAnim()
+end
+
 function Entity:loadAnim()
     self.texture = loadImage(self.type, self.id)
     if self.type == "entities" then
         self.animations = {
-            idle = nim.newAnim(self.texture, 32, 64, 1, 1),
-            running = nim.newAnim(self.texture, 32, 64, 1, 2)
+            idle = nim.newAnim(self.texture, self.texture:getWidth()/self.animFrames, self.texture:getHeight()/2, 1, 1),
+            running = nim.newAnim(self.texture, self.texture:getWidth()/self.animFrames, self.texture:getHeight()/2, 1, 2)
         }
     else
         self.animations = {
@@ -48,8 +56,6 @@ function Entity:unloadShadow(self)
 	else
 		error("You can't remove a shadow that doesn't exist.")
 	end
-end
-function Entity:load()
 end
 
 function Entity:hurt(dmg)
@@ -96,5 +102,20 @@ end
 
 function Entity:update(dt)
     self:move(dt)
-	--self.animation:update(dt)
+	self.currentAnimation:update(dt)
+end
+
+function entityFactory(type)
+    local entity = Entity()
+    if type == "rose" then
+        entity.animFrames = 4
+        entity.id = "rose"
+        entity.hostile = true
+    elseif type == "zombie" then
+        entity.animFrames = 4
+        entity.id = "zombie"
+        entity.hostile = true
+    else return
+    end
+    return entity
 end

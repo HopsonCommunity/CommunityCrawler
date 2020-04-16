@@ -6,6 +6,7 @@ Player.id = "player"
 Player.type = "entities"
 function Player:load()
     self.id = "player"
+    self.animFrames = 8
     self:loadAnim()
     self.name = "Player1"
     self.debugMode = false
