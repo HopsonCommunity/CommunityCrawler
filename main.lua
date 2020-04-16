@@ -23,6 +23,7 @@ function love.load()
 	atlasBatch = love.graphics.newSpriteBatch(loadImage("tiles", "atlas"), 2000)
 	fillSpriteBatch(atlasBatch, tileMap)
 	findSpawn()
+	randWalkSpawn()
 	initMenu()
 end
 
