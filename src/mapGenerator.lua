@@ -250,3 +250,17 @@ function exampleMap()
         tileMap[25 .. " " .. y] = tiles["brickWall"]
     end
 end
+
+function generateStringMap()
+    for y = topY - 1, bottomY + 1 do
+        local row = {}
+        for x = leftX - 1, rightX + 1 do
+            if tileMap[x .. " " .. y].solid then
+                table.insert(row, 1)
+            else
+                table.insert(row, 0)
+            end
+        end
+        table.insert(stringTileMap, row)
+    end
+end

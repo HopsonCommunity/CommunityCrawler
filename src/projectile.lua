@@ -12,9 +12,10 @@ function Projectile:load()
     self.id = "testBullet"
     self.name = "test bullet"
     self.description = "test bullet"
-    self.minDmg = 1
-    self.maxDmg = 3
+    self.minDmg = 1.5
+    self.maxDmg = 1.5
     self.critMultiplier = 1.1
+    self.critChance = 1
     self.texture = loadImage("projectiles", self.id)
 end
 

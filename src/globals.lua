@@ -6,6 +6,7 @@ Light = require "libs.shadows.Light"
 Body = require "libs.shadows.Body"
 require "libs.simple-slider"
 tileMap = {}
+stringTileMap = {}
 leftX = 0
 rightX = 0
 bottomY = 0

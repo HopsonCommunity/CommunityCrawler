@@ -25,6 +25,7 @@ function love.load()
     --generateMap()
     randWalkMap(1337)
     fillHolesAndSetWalls()
+    generateStringMap()
     addProps()
 	generateMapLighting()
     --exampleMap()
@@ -48,6 +49,23 @@ function love.update(dt)
     player:update(dt)
     for k, v in pairs(entities) do
         v:update(dt)
+        for k2, proj in pairs(projectiles) do
+            if v:checkHit(proj) then
+                local dmg = 0
+                if math.random(0, 100 - proj.critChance) == 1 then
+                    dmg = (math.random(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
+                else
+                    dmg = (math.random(proj.minDmg, proj.maxDmg))
+                end
+                v:hurt(dmg)
+                proj = nil
+                projectiles[k2] = nil
+            end
+        end
+        if v.health <= 0 then
+            v = nil
+            entities[k] = nil
+        end
     end
 	lightworld:SetPosition(math.floor((player.x + 0.5) * 32 + (-love.graphics.getWidth() / 2)), math.floor(player.y * 32 + (-love.graphics.getHeight() / 2)), 1)
 	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)

@@ -28,6 +28,16 @@ function evalCommands(cmd)
         return
     end
 
+    if cmds[1] == "butcher" or cmds[1] == "killall" then
+        for k, entity in pairs(entities) do
+            if entity.type ~= "props" then
+                entity = nil
+                entities[k] = nil
+            end
+        end
+        return
+    end
+
     if cmds[1] == "heal" then
         if cmds[2] == nil then cmds[2] = player.maxHealth else cmds[2] = tonumber(cmds[2]) end
         player:heal(cmds[2])

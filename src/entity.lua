@@ -111,8 +111,9 @@ function Entity:move(dt)
 
 end
 
-function checkHit(proj)
-    return round(self.x) == round(proj.x) and round(self.y) == round(proj.y)
+function Entity:checkHit(proj)
+    return math.floor(self.x) <= math.floor(proj.x/32) and math.floor(self.y) <= math.floor(proj.y/32) and
+            ceiling(self.x + 0.5) >=  ceiling(proj.x/32) and  ceiling(self.y + 0.5) >=  ceiling(proj.y/32)
 end
 
 function Entity:update(dt)

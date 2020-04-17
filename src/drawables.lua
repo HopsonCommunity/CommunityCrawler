@@ -12,6 +12,10 @@ function drawDebug()
 
     love.graphics.print("FPS: " .. love.timer.getFPS(), 0, 0)
     love.graphics.print("Map Size:   X: " .. math.abs(leftX) + math.abs(rightX) .. "   Y:" .. math.abs(topY) + math.abs(bottomY), 0, 16)
+    i = 16
+    for k, v in pairs(entities) do
+        love.graphics.print("Entity #" .. k .. "'s HP: '" .. v.health, 0, i + i*k)
+    end
 end
 
 function drawChat()
