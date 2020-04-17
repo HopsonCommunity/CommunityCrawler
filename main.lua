@@ -32,10 +32,14 @@ function love.load()
 	fillSpriteBatch(atlasBatch, tileMap)
 	randWalkSpawn(player, 20)
     for entity = 0, 10 do
-        local zombie = entityFactory("zombie")
-        zombie:load()
-        randWalkSpawn(zombie, 20)
-        table.insert(entities, zombie)
+	local zombie = entityFactory("zombie")
+	local skelebomber = entityFactory("skelebomber")
+	zombie:load()
+	skelebomber:load()
+	randWalkSpawn(zombie, 20)
+	randWalkSpawn(skelebomber, 20)
+	table.insert(entities, zombie)
+	table.insert(entities, skelebomber)
     end
 	initMenu()
 end
