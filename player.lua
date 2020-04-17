@@ -23,8 +23,6 @@ function Player:load()
     self.chatOpen = false
     self.chatWrite = ""
     self.inventory = inventory
-	self.canMove = true
-	self.itemCooldown = 0
 	self.rolling = false
 	self.rollMove = {x = 0, y = 0}
 	self.rollCooldown = 0
@@ -35,7 +33,7 @@ function Player:load()
 end
 
 function Player:input(dt)
-    if player.canMove and not player.rolling then
+    if not player.rolling and not player.chatOpen then
 		local moving
         if love.keyboard.isDown(self.controls["right"]) then self.xVelocity = math.min(self.xVelocity + self.entityAcceleration,  self.entitySpeed); moving = true end
         if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed); moving = true end

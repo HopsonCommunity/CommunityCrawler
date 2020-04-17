@@ -2,6 +2,10 @@ require "globals"
 require "utils"
 require "tiles"
 require "item"
+require "weapon"
+require "ranged"
+require "melee"
+require "factories"
 require "inventory"
 require "entity"
 require "prop"
@@ -45,7 +49,9 @@ function love.update(dt)
 	playerLight:SetPosition((player.x * 32) + 16, (player.y * 32) + 24)
 	lightworld:Update()
 	updateSliders()
-	player.itemCooldown = math.max(player.itemCooldown - dt, 0)
+    if player.inventory.hotbar[player.inventory.selected] ~= "none" then
+        player.inventory.hotbar[player.inventory.selected].cooldownTimer = math.max(player.inventory.hotbar[player.inventory.selected].cooldownTimer - dt, 0)
+    end
 	if player.rolling then
 		player.rollTime = player.rollTime + dt
 		player:updateRoll()
@@ -70,7 +76,6 @@ end
 function love.keypressed(key, scancode, isrepeat)
     if player.chatOpen == true then
         if key == "return" or key == "kpenter" then
-			player.canMove = true
             player.chatOpen = false
             if string.sub(player.chatWrite, 1, 1) == "/" and string.len(player.chatWrite) > 1 then evalCommands(player.chatWrite) end
             if len(chatTexts) >= 22 then
@@ -88,7 +93,6 @@ function love.keypressed(key, scancode, isrepeat)
     elseif key == player.controls["debug"] then player.debugMode = not player.debugMode end
     if (key == "return" or key == "kpenter") and player.chatOpen == false then
         player.chatOpen = true
-		player.canMove = false
     end
     if inList({ "1", "2", "3", "4", "0" }, key) then
         if key == "0" then key = "4" end
@@ -121,30 +125,10 @@ function love.wheelmoved(x, y)
 end
 
 function love.mousepressed(x, y, button, isTouch)
-    if button == 1 and player.inventory.hotbar[player.inventory.selected].type == "gun" and player.itemCooldown == 0 and not player.rolling then
-		for i=1,player.inventory.hotbar[player.inventory.selected].bulletNum do
-			local newProjectile = Projectile()
-			newProjectile:load()
-			newProjectile.y = player.y * 32
-			local opp = y - love.graphics.getHeight()/2 - player.y
-			local adj = x - love.graphics.getWidth()/2 - player.x
-			local hyp = math.sqrt(opp * opp + adj * adj)
-			local ang = math.asin(opp / hyp)
-			if player.facing == "left" then
-				newProjectile.x = player.x * 32 - math.cos(ang) * 24 - math.max(math.cos(-ang), 0) * 24
-				ang = ang * -1
-				ang = ang - math.rad(90)
-				newProjectile.y = newProjectile.y + 17
-			else
-				newProjectile.x = (player.x + 1) * 32 + math.cos(ang) * 24 + math.max(math.cos(ang), 0) * 24
-				newProjectile.y = newProjectile.y + 3
-				ang = ang + math.rad(90)
-			end
-			if player.inventory.hotbar[player.inventory.selected].spread then ang = ang + math.rad(math.random(player.inventory.hotbar[player.inventory.selected].spread * 2) - player.inventory.hotbar[player.inventory.selected].spread) end
-			newProjectile.angle = ang
-			table.insert(projectiles, newProjectile)
-		end
-		player.itemCooldown = player.inventory.hotbar[player.inventory.selected].cooldown
+    if button == 1 and player.inventory.hotbar[player.inventory.selected].cooldownTimer == 0 and not player.rolling then
+        if player.inventory.hotbar[player.inventory.selected].type == "ranged" then
+            player.inventory.hotbar[player.inventory.selected]:leftClick(x, y)
+        end
     end
 end
 
