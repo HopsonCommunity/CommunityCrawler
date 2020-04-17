@@ -1,0 +1,24 @@
+nim = require "libs.nim"
+shadows = require "libs.shadows"
+LightWorld = require "libs.shadows.LightWorld"
+PolygonShadow = require "libs.shadows.ShadowShapes.PolygonShadow"
+Light = require "libs.shadows.Light"
+Body = require "libs.shadows.Body"
+require "libs.simple-slider"
+tileMap = {}
+leftX = 0
+rightX = 0
+bottomY = 0
+topY = 0
+debug1 = {}
+debug2 = {}
+lightworld = LightWorld:new()
+shadowshapes = Body:new(lightworld)
+playerLight = Light:new(lightworld, 512)
+worldShadows = {}
+worldLights = {}
+sliders = {}
+projectiles = {}
+entities = {}
+chatTexts = {}
+atlasOffsets = {}
