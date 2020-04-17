@@ -29,7 +29,7 @@ function entityFactory(id)
         entity.id = "zombie"
         entity.hostile = true
     elseif id == "skelebomber" then
-        entity.animFrames = 4
+        entity.animFrames = 
         entity.id = "skelebomber"
         entity.hostile = true
     else return
