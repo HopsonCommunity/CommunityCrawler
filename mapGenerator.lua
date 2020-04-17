@@ -231,7 +231,8 @@ function addProps()
                 local crate = Prop()
 				crate.x = x
                 crate.y = y
-                crate:load("crate")
+                crate.id = "crate"
+                crate:load()
                 table.insert(entities, crate)
             end
         end

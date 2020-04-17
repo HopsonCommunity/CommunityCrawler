@@ -71,7 +71,7 @@ end
 function love.textinput(t)
     if player.chatOpen then
         local tmp = love.graphics.newText(love.graphics.newFont(16), player.chatWrite .. t)
-        if tmp:getWidth() < 500 then
+        if tmp:getWidth() < 320 then
             player.chatWrite = player.chatWrite .. t
         end
     end
@@ -91,7 +91,7 @@ function love.keypressed(key, scancode, isrepeat)
         end
 
         tmp = love.graphics.newText(love.graphics.newFont(16), player.chatWrite .. love.system.getClipboardText())
-        if love.keyboard.isDown("lctrl") and key == "v" and tmp:getWidth() < 500 then
+        if love.keyboard.isDown("lctrl") and key == "v" and tmp:getWidth() < 320 then
             player.chatWrite = player.chatWrite .. love.system.getClipboardText()
         elseif key == "backspace" then player.chatWrite = string.sub(player.chatWrite, 1, string.len(player.chatWrite)-1) end
     elseif key == player.controls["debug"] then player.debugMode = not player.debugMode end

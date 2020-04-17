@@ -15,24 +15,36 @@ function itemFactory(id)
         local item = Melee()
         item:load("sword", "Sword", "It's a sword, it doesn't do magic tricks.", 5, 7, 1.5, 0.07, 1.3)
         return item
+    else
+        return nil
     end
 end
 
 function entityFactory(id)
-    local entity = Entity()
     if id == "rose" then
+        local entity = Entity()
         entity.animFrames = 4
         entity.id = "rose"
         entity.hostile = true
+        return entity
     elseif id == "zombie" then
+        local entity = Entity()
         entity.animFrames = 4
         entity.id = "zombie"
         entity.hostile = true
+        return entity
     elseif id == "skelebomber" then
+        local entity = Entity()
         entity.animFrames = 4
         entity.id = "skelebomber"
         entity.hostile = true
-    else return
+        return entity
+    elseif id == "crate" then
+        local entity = Prop()
+        entity.animFrames = 1
+        entity.id = "crate"
+        return entity
+    else
+        return nil
     end
-    return entity
 end

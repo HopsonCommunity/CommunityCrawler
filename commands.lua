@@ -10,6 +10,24 @@ function evalCommands(cmd)
         return
     end
 
+    if cmds[1] == "summon" or cmds[1] == "spawn" then
+        if cmds[2] == nil then return end
+        local entity = entityFactory(cmds[2])
+        if entity == nil then return end
+        entity:load()
+        if cmds[3] ~= nil and cmds[4] ~= nil then
+            entity.x = tonumber(cmds[3])
+            entity.y = tonumber(cmds[4])
+        elseif cmds[3] == "random" then
+            randWalkSpawn(entity, 20)
+        else
+            entity.x = player.x
+            entity.y = player.y
+        end
+        table.insert(entities, entity)
+        return
+    end
+
     if cmds[1] == "heal" then
         if cmds[2] == nil then cmds[2] = player.maxHealth else cmds[2] = tonumber(cmds[2]) end
         player:heal(cmds[2])
