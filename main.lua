@@ -39,7 +39,7 @@ function love.load()
 	randWalkSpawn(zombie, 20)
 	randWalkSpawn(skelebomber, 20)
 	table.insert(entities, zombie)
-	able.insert(entities, skelebomber)
+	table.insert(entities, skelebomber)
     end
 	initMenu()
 end
