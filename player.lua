@@ -4,6 +4,7 @@ Player:addparent(Entity)
 
 Player.id = "player"
 Player.type = "entities"
+Player.entitySpeed = 64
 function Player:load()
     self.id = "player"
     self.animFrames = 8

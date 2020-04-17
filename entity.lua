@@ -9,7 +9,7 @@ Entity.health = 100
 Entity.maxHealth = 100
 Entity.xVelocity = 0
 Entity.yVelocity = 0
-Entity.entitySpeed = 64
+Entity.entitySpeed = 8
 Entity.entityAcceleration = 4
 Entity.friction = 0.8
 Entity.shadow = {}
@@ -65,6 +65,17 @@ function Entity:heal(hp)
     if self.health + hp > self.maxHealth then self.health = self.maxHealth else self.health = self.health + hp end
 end
 
+function Entity:moveDir(dt)
+    local mv = {}
+    mv.x = player.x - self.x
+    mv.y = player.y - self.y
+    local distance = math.sqrt(mv.x * mv.x + mv.y * mv.y)
+    if math.abs(distance) > 0.5 then
+        self.xVelocity = mv.x / distance * self.entitySpeed
+        self.yVelocity = mv.y / distance * self.entitySpeed
+    end
+end
+
 function Entity:move(dt)
     self.xVelocity = self.xVelocity * self.friction
     self.yVelocity = self.yVelocity * self.friction
@@ -100,7 +111,12 @@ function Entity:move(dt)
 
 end
 
+function checkHit(proj)
+    return round(self.x) == round(proj.x) and round(self.y) == round(proj.y)
+end
+
 function Entity:update(dt)
+    self:moveDir(dt)
     self:move(dt)
 	self.currentAnimation:update(dt)
 end

@@ -20,3 +20,6 @@ function Prop:load()
     self:loadAnim()
 	self:loadShadow()
 end
+
+function Prop:update()
+end
