@@ -104,18 +104,3 @@ function Entity:update(dt)
     self:move(dt)
 	self.currentAnimation:update(dt)
 end
-
-function entityFactory(type)
-    local entity = Entity()
-    if type == "rose" then
-        entity.animFrames = 4
-        entity.id = "rose"
-        entity.hostile = true
-    elseif type == "zombie" then
-        entity.animFrames = 4
-        entity.id = "zombie"
-        entity.hostile = true
-    else return
-    end
-    return entity
-end

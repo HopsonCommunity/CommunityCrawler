@@ -1,11 +1,12 @@
 inventory = {hotbar = {}, selected = 1}
+inventory.hotbarIcon = loadImage("GUI", "hotbarIcon")
+inventory.hotbarIconSelected = loadImage("GUI", "hotbarSelected")
 
 inventory.hotbar[1] = itemFactory("luger")
 inventory.hotbar[2] = itemFactory("pocketShotgun")
-inventory.hotbar[3] = "none"
+inventory.hotbar[3] = itemFactory("sword")
 inventory.hotbar[4] = "none"
-inventory.hotbarIcon = loadImage("GUI", "hotbarIcon")
-inventory.hotbarIconSelected = loadImage("GUI", "hotbarSelected")
+
 
 function inventory.draw()
     if inventory.selected == 1 then
