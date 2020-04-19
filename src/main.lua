@@ -33,14 +33,14 @@ function love.load()
 	fillSpriteBatch(atlasBatch, tileMap)
 	randWalkSpawn(player, 20)
     for entity = 0, 10 do
-	local zombie = entityFactory("zombie")
-	local skelebomber = entityFactory("skelebomber")
-	zombie:load()
-	skelebomber:load()
-	randWalkSpawn(zombie, 20)
-	randWalkSpawn(skelebomber, 20)
-	table.insert(entities, zombie)
-	table.insert(entities, skelebomber)
+		local zombie = entityFactory("zombie")
+		local skelebomber = entityFactory("skelebomber")
+		zombie:load()
+		skelebomber:load()
+		randWalkSpawn(zombie, 20)
+		randWalkSpawn(skelebomber, 20)
+		table.insert(entities, zombie)
+		table.insert(entities, skelebomber)
     end
 	initMenu()
 end
@@ -52,7 +52,7 @@ function love.update(dt)
         for k2, proj in pairs(projectiles) do
             if v:checkHit(proj) then
                 local dmg = 0
-                if math.random(0, 100 - proj.critChance) == 1 then
+                if math.random(proj.critChance) == 1 then
                     dmg = (math.random(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
                 else
                     dmg = (math.random(proj.minDmg, proj.maxDmg))
@@ -63,7 +63,7 @@ function love.update(dt)
             end
         end
         if v.health <= 0 then
-            v = nil
+			entities[k]:unloadShadow()
             entities[k] = nil
         end
     end

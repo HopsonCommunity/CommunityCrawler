@@ -31,7 +31,7 @@ function evalCommands(cmd)
     if cmds[1] == "butcher" or cmds[1] == "killall" then
         for k, entity in pairs(entities) do
             if entity.type ~= "props" then
-                entity = nil
+				entities[k]:unloadShadow()
                 entities[k] = nil
             end
         end

@@ -190,3 +190,7 @@ function updateProjectiles()
 		end
     end
 end
+
+function tileRaycast(x, y, tx, ty)
+	
+end

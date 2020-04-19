@@ -49,12 +49,10 @@ function Entity:loadShadow()
 		end
 	end
 end
-function Entity:unloadShadow(self)
+function Entity:unloadShadow()
 	if self.shadowIndex then
-		worldShadows[self.shadow.index]:Remove()
+		worldShadows[self.shadowIndex]:Remove()
 		self.shadowIndex = nil
-	else
-		error("You can't remove a shadow that doesn't exist.")
 	end
 end
 
