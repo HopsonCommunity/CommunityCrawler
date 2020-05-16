@@ -185,9 +185,13 @@ function updateProjectiles()
 		v:update(dt)
 		v.lifespan = v.lifespan - dt * 60
 		if v.lifespan <= 0 then
+			if v.light then
+				v.light:Remove()
+			end
 			v = nil
 			projectiles[k] = nil
 		else
+			v.light:SetPosition(v.x, v.y)
 			local val = 1
 			if v.facing == "left" then val = -1 end
 			love.graphics.draw(v.texture, v.x, v.y, v.angle, val)

@@ -58,7 +58,10 @@ function love.update(dt)
                     dmg = (randomFloat(proj.minDmg, proj.maxDmg))
                 end
                 v:hurt(dmg)
-                proj = nil
+                if proj.light then
+					proj.light:Remove()
+				end
+				proj = nil
                 projectiles[k2] = nil
             end
         end
