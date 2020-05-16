@@ -14,6 +14,7 @@ local projTypes = {
 		minDmg = 0.05,
 		maxDmg = 0.1,
 		lightRadius = 32,
+		lightColor = {1, 0.8, 0},
 		trail = nim.newParticle({1, 0.8, 0.1}, {1, 0.5, 0.1}, {1, 0.8, 0.1}, 4, 4, 8, "square", 0.2, 0.3, -0.2, 0.2, -2, -1, nil, nil, "fill", 0, 0, 180)
 	},
 }
@@ -40,6 +41,10 @@ function Projectile:load(id)
 	self.trailTimer = p.trailTimer or 0
 	if p.lightRadius then
 		self.light = Light:new(lightworld, p.lightRadius)
+		if p.lightColor then
+			local r, g, b = unpack(p.lightColor)
+			self.light:SetColor(round(r * 255), round(g * 255), round(b * 255))
+		end
 	end
 end
 
