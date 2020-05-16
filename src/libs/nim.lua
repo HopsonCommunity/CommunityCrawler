@@ -105,7 +105,7 @@ function nim.addParticle(pa, x, y)
 	local p = lcp(pa)
 	local rand = {"s", "d", "xv", "yv", "rot"}
 	for i, v in ipairs(rand) do
-		p[v] = math.random(p["_" .. v].min, p["_" .. v].max)
+		p[v] = math.random() * (p["_" .. v].max - p["_" .. v].min) + p["_" .. v].min
 	end
 	p.cs = {}
 	p.cs[1] = math.random(p._cs.min[1], p._cs.max[1])

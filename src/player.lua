@@ -30,7 +30,7 @@ function Player:load()
 	self.rollTimer = 0
 	self.rollLength = 0.15
 	self.rollWait = 1
-	self.rollParticle = nim.newParticle({1, 1, 1}, {0.5, 0.5, 0.5}, {0.5, 0.5, 0.5}, 8, 16, "square", 0.2, 0.3, -0.3, 0.3, -0.3, -0.3, 0.95, false, "fill", 0, 0)
+	self.rollParticle = nim.newParticle({1, 1, 1}, {0.5, 0.5, 0.5}, {0.5, 0.5, 0.5}, 8, 16, "circle", 0.2, 0.3, -0.3, 0.3, -0.3, -0.3, 0.95, false, "fill", 0, 0)
 end
 
 function Player:input(dt)
