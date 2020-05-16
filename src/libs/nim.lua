@@ -97,8 +97,8 @@ local function lerp(c, t, o)
 	return ((c * (1 - lo)) + (t * lo))
 end
 
-function nim.newParticle(c, ncs, mcs, ns, ms, t, nd, md, nxv, mxv, nyv, myv, f, g, fl, nrot, mrot)
-	return {c = c, _cs = {min = (ncs or c), max = (mcs or c)}, _s = {min = (ns or 1), max = (ms or 1)}, t = t, _d = {min = nd, max = md}, _xv = {min = (nxv or -1), max = (mxv or 1)}, _yv = {min = (nyv or -1), max = (myv or 1)}, g = g, f = f, fl = fl, _rot = {min = (nrot or -1), max = (mrot or 1)}, tmr = 0}
+function nim.newParticle(c, ncs, mcs, ss, ns, ms, t, nd, md, nxv, mxv, nyv, myv, f, g, fl, sr, nrot, mrot)
+	return {c = c, _cs = {min = (ncs or c), max = (mcs or c)}, _s = {min = (ns or 1), max = (ms or 1), start = (ss or 0)}, t = t, _d = {min = nd, max = md}, _xv = {min = (nxv or -1), max = (mxv or 1)}, _yv = {min = (nyv or -1), max = (myv or 1)}, g = g, f = f, fl = fl, _rot = {min = (nrot or -1), max = (mrot or 1), start = (sr or 0)}, tmr = 0}
 end
 
 function nim.addParticle(pa, x, y)
@@ -108,10 +108,11 @@ function nim.addParticle(pa, x, y)
 		p[v] = math.random() * (p["_" .. v].max - p["_" .. v].min) + p["_" .. v].min
 	end
 	p.cs = {}
-	p.cs[1] = math.random(p._cs.min[1], p._cs.max[1])
-	p.cs[2] = math.random(p._cs.min[2], p._cs.max[2])
-	p.cs[3] = math.random(p._cs.min[3], p._cs.max[3])
-	p.cs[4] = math.random(p._cs.min[4] or 1, p._cs.max[4] or 1)
+	local lv = math.random()
+	p.cs[1] = lerp(p._cs.min[1], p._cs.max[1], lv)
+	p.cs[2] = lerp(p._cs.min[2], p._cs.max[2], lv)
+	p.cs[3] = lerp(p._cs.min[3], p._cs.max[3], lv)
+	p.cs[4] = lerp(p._cs.min[4] or 1, p._cs.max[4] or 1, lv)
 	p.x, p.y = x, y
 	table.insert(particles, p)
 end
@@ -146,8 +147,8 @@ function nim.drawParticles()
 		c[2] = lerp(p.c[2], p.cs[2], l)
 		c[3] = lerp(p.c[3], p.cs[3], l)
 		c[4] = lerp(p.c[4] or 1, p.cs[4] or 1, l)
-		local s = lerp(0, p.s, l)
-		local r = lerp(0, p.rot, l)
+		local s = lerp(p._s.start, p.s, l)
+		local r = lerp(p._rot.start, p.rot, l)
 		love.graphics.push()
 		love.graphics.translate(p.x, p.y)
 		love.graphics.rotate(math.rad(r))
@@ -165,6 +166,7 @@ function nim.drawParticles()
 end
 
 function nim.newTilemap(file, loader)
+	local map = {}
 	if (loader == nil) or (loader == "csv") then
 		for line in love.filesystem.lines(fil) do
 			table.insert(map, line)

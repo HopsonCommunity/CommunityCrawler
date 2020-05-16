@@ -187,6 +187,13 @@ function updateProjectiles()
 			local val = 1
 			if v.facing == "left" then val = -1 end
 			love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
+			if v.trail then
+				v.trailTimer = v.trailTimer + dt
+				if v.trailTimer > v.trailWait then
+					nim.addParticle(v.trail, v.x, v.y)
+					v.trailTimer = v.trailTimer % v.trailWait
+				end
+			end
 		end
     end
 end

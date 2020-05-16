@@ -17,6 +17,9 @@ function Projectile:load()
     self.critMultiplier = 1.1
     self.critChance = 1
     self.texture = loadImage("projectiles", self.id)
+	self.trail = nim.newParticle({0.5, 0.5, 0.5}, {0.5, 0.5, 0.5}, {0.7, 0.7, 0.7}, 4, 4, 8, "square", 0.9, 0.9, -0.2, 0.2, -2, -1, nil, nil, "fill", 0, 0, 180)
+	self.trailWait = 0.05
+	self.trailTimer = 0
 end
 
 function Projectile:update(dt)
