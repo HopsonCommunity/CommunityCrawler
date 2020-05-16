@@ -191,7 +191,9 @@ function updateProjectiles()
 			v = nil
 			projectiles[k] = nil
 		else
-			v.light:SetPosition(v.x, v.y)
+			if v.light then
+				v.light:SetPosition(v.x, v.y)
+			end
 			local val = 1
 			if v.facing == "left" then val = -1 end
 			love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
