@@ -5,7 +5,7 @@ inventory.hotbarIconSelected = loadImage("GUI", "hotbarSelected")
 inventory.hotbar[1] = itemFactory("luger")
 inventory.hotbar[2] = itemFactory("pocketShotgun")
 inventory.hotbar[3] = itemFactory("sword")
-inventory.hotbar[4] = "none"
+inventory.hotbar[4] = itemFactory("flamethrower")
 
 
 function inventory.draw()

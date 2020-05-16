@@ -53,9 +53,9 @@ function love.update(dt)
             if v:checkHit(proj) then
                 local dmg = 0
                 if math.random(proj.critChance) == 1 then
-                    dmg = (math.random(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
+                    dmg = (randomFloat(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
                 else
-                    dmg = (math.random(proj.minDmg, proj.maxDmg))
+                    dmg = (randomFloat(proj.minDmg, proj.maxDmg))
                 end
                 v:hurt(dmg)
                 proj = nil
@@ -83,6 +83,11 @@ function love.update(dt)
 	else
 		player.rollCooldown = math.max(player.rollCooldown - dt, 0)
 	end
+	if love.mouse.isDown(1) and player.inventory.hotbar[player.inventory.selected].cooldownTimer == 0 and not player.rolling then
+        if (player.inventory.hotbar[player.inventory.selected].type == "ranged") and (player.inventory.hotbar[player.inventory.selected].fireType == "auto") then
+            player.inventory.hotbar[player.inventory.selected]:leftClick(love.mouse.getX(), love.mouse.getY())
+        end
+    end
 	nim.updateParticles(dt)
 end
 
@@ -129,6 +134,14 @@ function love.keypressed(key, scancode, isrepeat)
 
 end
 
+function love.mousepressed(x, y, button, isTouch)
+	if (button == 1) and player.inventory.hotbar[player.inventory.selected].cooldownTimer == 0 and not player.rolling then
+        if (player.inventory.hotbar[player.inventory.selected].type == "ranged") and (player.inventory.hotbar[player.inventory.selected].fireType == "semi") then
+            player.inventory.hotbar[player.inventory.selected]:leftClick(x, y)
+        end
+    end
+end
+
 function love.wheelmoved(x, y)
     if y < 0 then
         if player.inventory.selected < #player.inventory.hotbar then
@@ -143,14 +156,6 @@ function love.wheelmoved(x, y)
         else player.inventory.selected = #player.inventory.hotbar
         end
 		if player.inventory.hotbar[player.inventory.selected].id ~= nil then player.itemCooldown = math.max(player.inventory.hotbar[player.inventory.selected].cooldown, 1) end
-    end
-end
-
-function love.mousepressed(x, y, button, isTouch)
-    if button == 1 and player.inventory.hotbar[player.inventory.selected].cooldownTimer == 0 and not player.rolling then
-        if player.inventory.hotbar[player.inventory.selected].type == "ranged" then
-            player.inventory.hotbar[player.inventory.selected]:leftClick(x, y)
-        end
     end
 end
 

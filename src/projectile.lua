@@ -1,25 +1,42 @@
 require "libs.SECL.full"
 Projectile = class:new()
 
-function Projectile:load()
+local projTypes = {
+	testBullet = {
+		speed = 8,
+		minDmg = 1.5,
+		maxDmg = 1.5
+	},
+	flame = {
+		speed = 8,
+		name = "Flame",
+		desc = "Condensed fire",
+		minDmg = 0.05,
+		maxDmg = 0.1,
+		trail = nim.newParticle({1, 0.8, 0.1}, {1, 0.5, 0.1}, {1, 0.8, 0.1}, 4, 4, 8, "square", 0.2, 0.3, -0.2, 0.2, -2, -1, nil, nil, "fill", 0, 0, 180)
+	},
+}
+
+function Projectile:load(id)
+	local p = projTypes[id]
     self.x = 0
     self.y = 0
     self.angle = 0
     self.facing = "right"
     self.lifespan = 120
-    self.speed = 8
+    self.speed = p.speed
 
-    self.id = "testBullet"
-    self.name = "test bullet"
-    self.description = "test bullet"
-    self.minDmg = 1.5
-    self.maxDmg = 1.5
-    self.critMultiplier = 1.1
-    self.critChance = 1
+    self.id = id
+    self.name = p.name or "test bullet"
+    self.description = p.desc or "test bullet"
+    self.minDmg = p.minDmg
+    self.maxDmg = p.maxDmg
+    self.critMultiplier = p.critMult or 1.1
+    self.critChance = p.critChance or 1
     self.texture = loadImage("projectiles", self.id)
-	self.trail = nim.newParticle({0.5, 0.5, 0.5}, {0.5, 0.5, 0.5}, {0.7, 0.7, 0.7}, 4, 4, 8, "square", 0.9, 0.9, -0.2, 0.2, -2, -1, nil, nil, "fill", 0, 0, 180)
-	self.trailWait = 0.05
-	self.trailTimer = 0
+	self.trail = p.trail or nim.newParticle({0.5, 0.5, 0.5}, {0.5, 0.5, 0.5}, {0.7, 0.7, 0.7}, 4, 4, 8, "square", 0.9, 0.9, -0.2, 0.2, -2, -1, nil, nil, "fill", 0, 0, 180)
+	self.trailWait = p.trailWait or 0.05
+	self.trailTimer = p.trailTimer or 0
 end
 
 function Projectile:update(dt)

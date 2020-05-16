@@ -15,6 +15,10 @@ function itemFactory(id)
         local item = Melee()
         item:load("sword", "Sword", "It's a sword, it doesn't do magic tricks.", 3, 5, 1.5, 0.07, 1.3)
         return item
+	elseif id == "flamethrower" then
+		local item = Ranged()
+        item:load("flamethrower", "Flamethrower", "A shotgun. That fits in your pocket.", 60, 120, 1.3, 0.1, 5, 15, "flame", "auto")
+        return item
     else
         return nil
     end

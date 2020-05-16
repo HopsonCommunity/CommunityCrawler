@@ -5,7 +5,7 @@ Ranged:addparent(Weapon)
 Ranged.type = "ranged"
 Ranged.cooldownTimer = 0
 
-function Ranged:load(id, name, description, minDmg, maxDmg, critMultiplier, cooldown, bulletNum, spread)
+function Ranged:load(id, name, description, minDmg, maxDmg, critMultiplier, cooldown, bulletNum, spread, bulletType, fireType)
     self.id = id
     self.name = name
     self.description = description
@@ -17,12 +17,14 @@ function Ranged:load(id, name, description, minDmg, maxDmg, critMultiplier, cool
     self.spread = spread
     self.critChance = 5
     self.texture = loadImage("items", self.id)
+	self.bulletType = bulletType or "testBullet"
+	self.fireType = fireType or "semi"
 end
 
 function Ranged:leftClick(x, y)
     for i = 1, self.bulletNum do
         local newProjectile = Projectile()
-        newProjectile:load()
+        newProjectile:load(self.bulletType)
         newProjectile.minDmg = newProjectile.minDmg * self.minDmg
         newProjectile.maxDmg = newProjectile.maxDmg * self.maxDmg
         newProjectile.critMultiplier = newProjectile.critMultiplier * self.critMultiplier

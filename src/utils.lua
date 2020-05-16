@@ -175,6 +175,10 @@ function updateSliders()
 
 end
 
+function randomFloat(min, max)
+	return (math.random()*(max-min)+min)
+end
+
 function updateProjectiles()
 	local dt = love.timer.getDelta()
 	for k, v in pairs(projectiles) do
