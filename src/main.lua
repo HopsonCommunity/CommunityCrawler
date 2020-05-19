@@ -168,7 +168,7 @@ function love.draw()
 
 
     love.graphics.setBackgroundColor(0, 0, 0)
-    love.graphics.translate(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2), -player.y * 32 + (love.graphics.getHeight() / 2))
+    love.graphics.translate(math.floor(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2)), math.floor(-player.y * 32 + (love.graphics.getHeight() / 2)))
 
 	--[[
     for k, v in pairs(tileMap) do
@@ -189,7 +189,7 @@ function love.draw()
 
 	love.graphics.translate(math.floor(-(player.x + 0.5) * 32 + (love.graphics.getWidth() / 2)), math.floor(-player.y * 32 + (love.graphics.getHeight() / 2)))
 	local flip = player.facing == "left"
-    nim.drawAnim(player.currentAnimation, player.x * 32, (player.y - 1) * 32, 90, flip)
+    nim.drawAnim(player.currentAnimation, player.x * 32, player.y * 32, 90, flip)
 	if player.inventory.hotbar[player.inventory.selected].id ~= nil then
         local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
         local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x

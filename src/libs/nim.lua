@@ -1,6 +1,7 @@
 local nim = {}
 local particles = {}
 
+--[[
 function nim.newAnim(image, width, height, duration)
     local animation = {}
 	local fim = image
@@ -25,8 +26,9 @@ function nim.newAnim(image, width, height, duration)
  
     return animation
 end
+]]
 
-function nim.newAnim(image, width, height, duration, row)
+function nim.newAnim(image, width, height, duration, row, ox, oy)
 	if row < 1 then return end
 	
     local animation = {}
@@ -36,6 +38,8 @@ function nim.newAnim(image, width, height, duration, row)
     animation.quads = {}
 	animation.width = width
 	animation.height = height
+	animation.ox = ox or 0
+	animation.oy = oy or 0
  
     for x = 0, fim:getWidth() - width, width do
 		table.insert(animation.quads, love.graphics.newQuad(x, (row-1) * height, width, height, fim:getDimensions()))
@@ -55,9 +59,9 @@ function nim.drawAnim(anim, x, y, r, flip)
 	local spriteNum = math.floor(anim.currentTime / anim.duration * #anim.quads) + 1
 	if spriteNum < 1 then return end
 	if flip then
-		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2), y + (anim.height / 2), math.rad((r or 90) - 90), -1, 1, anim.width / 2, anim.height / 2)
+		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2) + anim.ox, y + (anim.height / 2) + anim.oy, math.rad((r or 90) - 90), -1, 1, anim.width / 2, anim.height / 2)
 	else
-		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2), y + (anim.height / 2), math.rad((r or 90) - 90), 1, 1, anim.width / 2, anim.height / 2)
+		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2) + anim.ox, y + (anim.height / 2) + anim.oy, math.rad((r or 90) - 90), 1, 1, anim.width / 2, anim.height / 2)
 	end
 end
 
@@ -65,9 +69,9 @@ function nim.drawTile(anim, x, y, r, flip)
 	local spriteNum = (anim.duration - math.floor(anim.duration - anim.currentTime)) + 1
 	if spriteNum < 1 then return end
 	if flip then
-		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2), y + (anim.height / 2), math.rad((r or 90) - 90), -1, 1, anim.width / 2, anim.height / 2)
+		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2) + anim.ox, y + (anim.height / 2) + anim.oy, math.rad((r or 90) - 90), -1, 1, anim.width / 2, anim.height / 2)
 	else
-		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2), y + (anim.height / 2), math.rad((r or 90) - 90), 1, 1, anim.width / 2, anim.height / 2)
+		love.graphics.draw(anim.spriteSheet, anim.quads[spriteNum], x + (anim.width / 2) + anim.ox, y + (anim.height / 2) + anim.oy, math.rad((r or 90) - 90), 1, 1, anim.width / 2, anim.height / 2)
 	end
 end
 
