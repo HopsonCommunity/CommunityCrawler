@@ -23,7 +23,6 @@ end
 function Entity:loadAnim()
     self.texture = loadImage(self.type, self.id)
     if self.type == "entities" then
-		print(0-((self.texture:getHeight()/2)-32), 0-((self.texture:getWidth()/self.animFrames/2)-16))
         self.animations = {
             idle = nim.newAnim(self.texture, self.texture:getWidth()/self.animFrames, self.texture:getHeight()/2, 1, 1, 0-((self.texture:getWidth()/self.animFrames/2)-16), 0-((self.texture:getHeight()/2)-32)),
             running = nim.newAnim(self.texture, self.texture:getWidth()/self.animFrames, self.texture:getHeight()/2, 1, 2, 0-((self.texture:getWidth()/self.animFrames/2)-16), 0-((self.texture:getHeight()/2)-32))
