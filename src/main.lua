@@ -148,7 +148,12 @@ function love.keypressed(key, scancode, isrepeat)
         if love.keyboard.isDown("lctrl") and key == "v" and tmp:getWidth() < 320 then
             player.chatWrite = player.chatWrite .. love.system.getClipboardText()
         elseif key == "backspace" then player.chatWrite = string.sub(player.chatWrite, 1, string.len(player.chatWrite)-1) end
-    elseif key == player.controls["debug"] then player.debugMode = not player.debugMode end
+    elseif key == player.controls["debug"] then
+		player.debugMode = not player.debugMode
+	elseif key == "j" then
+        if player.floor == "caveDungeon" then player.floor = "brickDungeon"
+        elseif player.floor == "brickDungeon" then player.floor = "caveDungeon" end
+    end
     if (key == "return" or key == "kpenter") and player.chatOpen == false then
         player.chatOpen = true
     end
@@ -162,7 +167,6 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "/" and player.chatOpen == false then
         player.chatOpen = true
     end
-
 end
 
 function love.mousepressed(x, y, button, isTouch)
