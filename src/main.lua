@@ -160,9 +160,11 @@ function love.keypressed(key, scancode, isrepeat)
         elseif key == "backspace" then player.chatWrite = string.sub(player.chatWrite, 1, string.len(player.chatWrite)-1) end
     elseif key == player.controls["debug"] then
 		player.debugMode = not player.debugMode
-	elseif key == "j" then
+    elseif key == "j" then
         if player.floor == "caveDungeon" then player.floor = "brickDungeon"
         elseif player.floor == "brickDungeon" then player.floor = "caveDungeon" end
+    elseif key == "e" then
+        player.inventory.invIsOpen = not player.inventory.invIsOpen
     end
     if (key == "return" or key == "kpenter") and player.chatOpen == false then
         player.chatOpen = true
@@ -253,7 +255,10 @@ function love.draw()
     local HPPerc = (1 - (player.health / player.maxHealth)) * 96
     local HPQuad = love.graphics.newQuad(0, HPPerc, 96, 96, player.healthImage:getDimensions())
     love.graphics.draw(player.healthImage, HPQuad, love.graphics.getWidth()/2 - 48, love.graphics.getHeight() - 96 - 32 + HPPerc)
-    player.inventory.draw()
+    player.inventory.drawHotbar()
+    if player.inventory.invIsOpen then
+        player.inventory.drawInventory()
+    end
 
     drawWholeChat()
     if player.chatOpen == true then drawChat() end
