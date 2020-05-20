@@ -230,7 +230,7 @@ function addProps(floor)
     for y = floor.topY - 1, floor.bottomY + 1 do
         for x = floor.leftX - 1, floor.rightX + 1 do
             if floor.tileMap[x .. " " .. y] ~= nil and floor.tileMap[x .. " ".. y].id == "brickFloor" and math.random(0, 50) == 1 then
-                local crate = Prop()
+                local crate = Prop(floor.type)
 				crate.x = x
                 crate.y = y
                 crate.id = "crate"
