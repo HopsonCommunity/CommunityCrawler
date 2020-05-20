@@ -4,14 +4,14 @@ function drawDebug()
 
     love.graphics.print(player.xVelocity .. " " .. player.yVelocity, player.x * 32, player.y * 32 - 64)
     love.graphics.print(player.x .. " " .. player.y, player.x * 32, player.y * 32 - 32)
-    love.graphics.print(floors[player.floor].leftX .. " " .. floors[player.floor].topY, floors[player.floor].leftX * 32, floors[player.floor].topY * 32)
-    love.graphics.print(floors[player.floor].rightX .. " " .. floors[player.floor].bottomY, floors[player.floor].rightX * 32, floors[player.floor].bottomY * 32)
+    love.graphics.print(floors[drawWorld].leftX .. " " .. floors[drawWorld].topY, floors[drawWorld].leftX * 32, floors[drawWorld].topY * 32)
+    love.graphics.print(floors[drawWorld].rightX .. " " .. floors[drawWorld].bottomY, floors[drawWorld].rightX * 32, floors[drawWorld].bottomY * 32)
 
     local pushValue = 0.1
     love.graphics.reset()
 
     love.graphics.print("FPS: " .. love.timer.getFPS(), 0, 0)
-    love.graphics.print("Map Size:   X: " .. math.abs(floors[player.floor].leftX) + math.abs(floors[player.floor].rightX) .. "   Y:" .. math.abs(floors[player.floor].topY) + math.abs(floors[player.floor].bottomY), 0, 16)
+    love.graphics.print("Map Size:   X: " .. math.abs(floors[drawWorld].leftX) + math.abs(floors[drawWorld].rightX) .. "   Y:" .. math.abs(floors[drawWorld].topY) + math.abs(floors[drawWorld].bottomY), 0, 16)
     i = 16
     for k, v in pairs(entities) do
         love.graphics.print("Entity #" .. k .. "'s HP: '" .. v.health, 0, i + i*k)

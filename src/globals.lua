@@ -9,7 +9,7 @@ debug1 = {}
 debug2 = {}
 lightworld = LightWorld:new()
 shadowshapes = Body:new(lightworld)
-playerLight = Light:new(lightworld, 512)
+playerLight = nil -- is set to a light in main.lua, not defined here because that is completely useless
 
 floors = {}
 

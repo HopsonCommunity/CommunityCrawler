@@ -10,6 +10,16 @@ tiles["brickWall"] = {
     solid = true,
     texture = "brickWall"
 }
+tiles["caveFloor"] = {
+    id = "caveFloor",
+    solid = false,
+    texture = "caveFloor"
+}
+tiles["caveWall"] = {
+    id = "caveWall",
+    solid = true,
+    texture = "caveWall"
+}
 tiles["halfWall"] = {
     id = "halfWall",
     solid = true,
@@ -20,6 +30,7 @@ tiles["halfWall"] = {
 		{x = 0, y = 16}
 	}
 }
+--[[
 tiles["crate"] = {
     id = "crate",
     solid = true,
@@ -32,6 +43,7 @@ tiles["crate"] = {
 		{x = 4, y = 32}
 	}
 }
+]]
 
 tiles["lightFloor"] = {
     id = "lightFloor",

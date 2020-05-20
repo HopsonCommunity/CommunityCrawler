@@ -177,7 +177,7 @@ function randWalkMap(steps, floor)
     while tileNum < steps do
 
         if floor.tileMap[pos.x .. " " .. pos.y] == nil then
-            floor.tileMap[pos.x .. " " .. pos.y] = tiles["brickFloor"]
+            floor.tileMap[pos.x .. " " .. pos.y] = tiles[floor.mapgen.floor]
             tileNum = tileNum + 1
             if pos.x > floor.rightX  then floor.rightX = pos.x end
             if pos.x < floor.leftX   then floor.leftX = pos.x end
@@ -217,8 +217,8 @@ function fillHolesAndSetWalls(floor)
                     if floor.tileMap[x - 1 .. " " .. y + 1] == nil or floor.tileMap[x - 1 .. " " .. y + 1].solid then surround = surround + 1 end
                     if floor.tileMap[x - 1 .. " " .. y - 1] == nil or floor.tileMap[x - 1 .. " " .. y - 1].solid then surround = surround + 1 end
 
-                    if surround <= 3 then floor.tileMap[x .. " " .. y] = tiles["brickFloor"]
-                    else floor.tileMap[x .. " " .. y] = tiles["brickWall"] end
+                    if surround <= 3 then floor.tileMap[x .. " " .. y] = tiles[floor.mapgen.floor]
+                    else floor.tileMap[x .. " " .. y] = tiles[floor.mapgen.wall] end
 
                 end
             end
@@ -229,11 +229,11 @@ end
 function addProps(floor)
     for y = floor.topY - 1, floor.bottomY + 1 do
         for x = floor.leftX - 1, floor.rightX + 1 do
-            if floor.tileMap[x .. " " .. y] ~= nil and floor.tileMap[x .. " ".. y].id == "brickFloor" and math.random(0, 50) == 1 then
-                local crate = Prop(floor.type)
+            if floor.tileMap[x .. " " .. y] ~= nil and floor.tileMap[x .. " ".. y].id == floor.mapgen.floor and math.random(0, 50) == 1 then
+                local crate = Prop()
 				crate.x = x
                 crate.y = y
-                crate.id = "crate"
+                crate.id = floor.mapgen.prop
                 crate:load()
                 table.insert(entities, crate)
             end

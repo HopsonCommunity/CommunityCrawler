@@ -15,8 +15,7 @@ Prop:addparent(Entity)
 
 Prop.id = "prop"
 Prop.type = "props"
-function Prop:load(floor)
-	self.floor = floor
+function Prop:load()
 	self.shadow = props[self.id].shadow
     self:loadAnim()
 	self:loadShadow()

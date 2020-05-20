@@ -16,8 +16,6 @@ require "commands"
 require "projectile"
 require "floor"
 
-lightworld:SetColor(127, 127, 127)
-
 function love.load()
     drawWorld = "brickDungeon"
     player = Player()
@@ -26,7 +24,7 @@ function love.load()
     floors["brickDungeon"] = Floor()
     floors["brickDungeon"]:load("brickDungeon")
     floors["caveDungeon"] = Floor()
-    floors["caveDungeon"]:load("caveDungeon")
+    floors["caveDungeon"]:load("caveDungeon", {floor = "caveFloor", wall = "caveWall"})
 
     --math.randomseed(os.clock())
     math.randomseed(1337)
@@ -45,15 +43,35 @@ function love.load()
 		table.insert(entities, skelebomber)
     end
 	initMenu()
+	lightworld = LightWorld:new()
+	lightworld:SetColor(127, 127, 127)
+	shadowshapes = Body:new(lightworld)
+	playerLight = Light:new(lightworld, 512)
+	generateMapLighting(floors[drawWorld])
 end
 
 function love.update(dt)
     player:update(dt)
     if drawWorld ~= player.floor then
+		for k, v in pairs(entities) do
+			if v.shadowIndex then
+				v:unloadShadow()
+			end
+		end
         drawWorld = player.floor
         randWalkSpawn(player, 20, floors[drawWorld])
         atlasBatch = love.graphics.newSpriteBatch(generateAtlas(), 2000)
         fillSpriteBatch(atlasBatch, floors[drawWorld].tileMap)
+		lightworld = LightWorld:new()
+		lightworld:SetColor(127, 127, 127)
+		shadowshapes = Body:new(lightworld)
+		playerLight = Light:new(lightworld, 512)
+		generateMapLighting(floors[drawWorld])
+		for k, v in pairs(entities) do
+			if v.shadowIndex then
+				v:loadShadow()
+			end
+		end
     end
     for k, v in pairs(entities) do
         if v.floor == player.floor then
@@ -144,10 +162,7 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "/" and player.chatOpen == false then
         player.chatOpen = true
     end
-    if key == "j" then
-        if player.floor == "caveDungeon" then player.floor = "brickDungeon"
-        elseif player.floor == "brickDungeon" then player.floor = "caveDungeon" end
-    end
+
 end
 
 function love.mousepressed(x, y, button, isTouch)
