@@ -24,7 +24,7 @@ function love.load()
     floors["brickDungeon"] = Floor()
     floors["brickDungeon"]:load("brickDungeon")
     floors["caveDungeon"] = Floor()
-    floors["caveDungeon"]:load("caveDungeon", {floor = "caveFloor", wall = "caveWall"})
+    floors["caveDungeon"]:load("caveDungeon", {floor = "caveFloor", wall = "caveWall", prop = "crate"})
 
     --math.randomseed(os.clock())
     math.randomseed(1337)
@@ -43,11 +43,21 @@ function love.load()
 		table.insert(entities, skelebomber)
     end
 	initMenu()
+	for k, v in pairs(entities) do
+		if v.shadowIndex then
+			v:unloadShadow()
+		end
+	end
 	lightworld = LightWorld:new()
 	lightworld:SetColor(127, 127, 127)
 	shadowshapes = Body:new(lightworld)
 	playerLight = Light:new(lightworld, 512)
 	generateMapLighting(floors[drawWorld])
+	for k, v in pairs(entities) do
+		if (not v.shadowIndex) and (v.floor == drawWorld) then
+			v:loadShadow()
+		end
+	end
 end
 
 function love.update(dt)
@@ -68,7 +78,7 @@ function love.update(dt)
 		playerLight = Light:new(lightworld, 512)
 		generateMapLighting(floors[drawWorld])
 		for k, v in pairs(entities) do
-			if v.shadowIndex then
+			if (not v.shadowIndex) and (v.floor == drawWorld) then
 				v:loadShadow()
 			end
 		end
