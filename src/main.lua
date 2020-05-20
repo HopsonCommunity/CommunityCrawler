@@ -144,7 +144,10 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "/" and player.chatOpen == false then
         player.chatOpen = true
     end
-
+    if key == "j" then
+        if player.floor == "caveDungeon" then player.floor = "brickDungeon"
+        elseif player.floor == "brickDungeon" then player.floor = "caveDungeon" end
+    end
 end
 
 function love.mousepressed(x, y, button, isTouch)
