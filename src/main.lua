@@ -14,31 +14,33 @@ require "mapGenerator"
 require "drawables"
 require "commands"
 require "projectile"
+require "floor"
 
 lightworld:SetColor(127, 127, 127)
 
 function love.load()
+    drawWorld = "brickDungeon"
     player = Player()
-    player:load()
+    player:load(drawWorld)
+
+    floors["brickDungeon"] = Floor()
+    floors["brickDungeon"]:load("brickDungeon")
+    floors["caveDungeon"] = Floor()
+    floors["caveDungeon"]:load("caveDungeon")
+
     --math.randomseed(os.clock())
     math.randomseed(1337)
-    --generateMap()
-    randWalkMap(1337)
-    fillHolesAndSetWalls()
-    generateStringMap()
-    addProps()
-	generateMapLighting()
     --exampleMap()
 	atlasBatch = love.graphics.newSpriteBatch(generateAtlas(), 2000)
-	fillSpriteBatch(atlasBatch, tileMap)
-	randWalkSpawn(player, 20)
+	fillSpriteBatch(atlasBatch, floors[drawWorld].tileMap)
+	randWalkSpawn(player, 20, floors[drawWorld])
     for entity = 0, 10 do
 		local zombie = entityFactory("zombie")
 		local skelebomber = entityFactory("skelebomber")
-		zombie:load()
-		skelebomber:load()
-		randWalkSpawn(zombie, 20)
-		randWalkSpawn(skelebomber, 20)
+		zombie:load(drawWorld)
+		skelebomber:load(drawWorld)
+		randWalkSpawn(zombie, 20, floors[drawWorld])
+		randWalkSpawn(skelebomber, 20, floors[drawWorld])
 		table.insert(entities, zombie)
 		table.insert(entities, skelebomber)
     end
@@ -47,27 +49,35 @@ end
 
 function love.update(dt)
     player:update(dt)
+    if drawWorld ~= player.floor then
+        drawWorld = player.floor
+        randWalkSpawn(player, 20, floors[drawWorld])
+        atlasBatch = love.graphics.newSpriteBatch(generateAtlas(), 2000)
+        fillSpriteBatch(atlasBatch, floors[drawWorld].tileMap)
+    end
     for k, v in pairs(entities) do
-        v:update(dt)
-        for k2, proj in pairs(projectiles) do
-            if v:checkHit(proj) then
-                local dmg = 0
-                if math.random(proj.critChance) == 1 then
-                    dmg = (randomFloat(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
-                else
-                    dmg = (randomFloat(proj.minDmg, proj.maxDmg))
+        if v.floor == player.floor then
+            v:update(dt)
+            for k2, proj in pairs(projectiles) do
+                if v:checkHit(proj) then
+                    local dmg = 0
+                    if math.random(proj.critChance) == 1 then
+                        dmg = (randomFloat(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
+                    else
+                        dmg = (randomFloat(proj.minDmg, proj.maxDmg))
+                    end
+                    v:hurt(dmg)
+                    if proj.light then
+    					proj.light:Remove()
+    				end
+    				proj = nil
+                    projectiles[k2] = nil
                 end
-                v:hurt(dmg)
-                if proj.light then
-					proj.light:Remove()
-				end
-				proj = nil
-                projectiles[k2] = nil
             end
-        end
-        if v.health <= 0 then
-			entities[k]:unloadShadow()
-            entities[k] = nil
+            if v.health <= 0 then
+    			entities[k]:unloadShadow()
+                entities[k] = nil
+            end
         end
     end
 	lightworld:SetPosition(math.floor((player.x + 0.5) * 32 + (-love.graphics.getWidth() / 2)), math.floor(player.y * 32 + (-love.graphics.getHeight() / 2)), 1)
@@ -88,7 +98,7 @@ function love.update(dt)
 	end
 	if love.mouse.isDown(1) and player.inventory.hotbar[player.inventory.selected].cooldownTimer == 0 and not player.rolling then
         if (player.inventory.hotbar[player.inventory.selected].type == "ranged") and (player.inventory.hotbar[player.inventory.selected].fireType == "auto") then
-            player.inventory.hotbar[player.inventory.selected]:leftClick(love.mouse.getX(), love.mouse.getY())
+            player.inventory.hotbar[player.inventory.selected]:leftClick(love.mouse.getX(), love.mouse.getY(), player.floor)
         end
     end
 	nim.updateParticles(dt)
@@ -140,7 +150,7 @@ end
 function love.mousepressed(x, y, button, isTouch)
 	if (button == 1) and player.inventory.hotbar[player.inventory.selected].cooldownTimer == 0 and not player.rolling then
         if (player.inventory.hotbar[player.inventory.selected].type == "ranged") and (player.inventory.hotbar[player.inventory.selected].fireType == "semi") then
-            player.inventory.hotbar[player.inventory.selected]:leftClick(x, y)
+            player.inventory.hotbar[player.inventory.selected]:leftClick(x, y, player.floor)
         end
     end
 end
@@ -179,7 +189,9 @@ function love.draw()
 	love.graphics.draw(atlasBatch)
 	nim.drawParticles()
 	for k, v in pairs(entities) do
-        nim.drawAnim(v.currentAnimation, v.x * 32, v.y * 32)
+        if v.floor == player.floor then
+            nim.drawAnim(v.currentAnimation, v.x * 32, v.y * 32)
+        end
     end
 
 	updateProjectiles()

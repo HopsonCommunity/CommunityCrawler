@@ -1,0 +1,22 @@
+require "libs.SECL.full"
+Floor = class:new()
+
+function Floor:load(type)
+    self.x = 0
+    self.y = 0
+    self.type = type
+    self.tileMap = {}
+    self.stringTileMap = {}
+    self.leftX = 0
+    self.rightX = 0
+    self.bottomY = 0
+    self.topY = 0
+
+    --generateMap()
+    randWalkMap(1337, self)
+    fillHolesAndSetWalls(self)
+    generateStringMap(self)
+    addProps(self)
+    generateMapLighting(self)
+
+end

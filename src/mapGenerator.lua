@@ -1,37 +1,37 @@
-function scanRoom(xs, ys, maxX, maxY)
+function scanRoom(xs, ys, maxX, maxY, floor)
     maxX = xs + maxX
     maxY = ys + maxY
     for y = ys, maxY do
         for x = xs, maxX do
             if y == ys or y == maxY or x == xs or x == maxX then
-                if tileMap[x .. " " .. y] ~= nil then return false end
+                if floor.tileMap[x .. " " .. y] ~= nil then return false end
             else
-                if tileMap[x .. " " .. y] ~= nil then return false end
+                if floor.tileMap[x .. " " .. y] ~= nil then return false end
             end
         end
     end
     return true
 end
 
-function generateRoom(xs, ys, maxX, maxY)
+function generateRoom(xs, ys, maxX, maxY, floor)
     maxX = xs + maxX
     maxY = ys + maxY
     for y = ys, maxY do
         for x = xs, maxX do
             if y == ys or y == maxY or x == xs or x == maxX then
-                tileMap[x .. " " .. y] = tiles["brickWall"]
+                floor.tileMap[x .. " " .. y] = tiles["brickWall"]
             else
-                tileMap[x .. " " .. y] = tiles["brickFloor"]
+                floor.tileMap[x .. " " .. y] = tiles["brickFloor"]
             end
-            if y > bottomY then bottomY = y end
-            if x > rightX then rightX = x end
-            if y < topY then topY = y end
-            if x < leftX then leftX = x end
+            if y > floor.bottomY then floor.bottomY = y end
+            if x > floor.rightX then floor.rightX = x end
+            if y < floor.topY then floor.topY = y end
+            if x < floor.leftX then floor.leftX = x end
         end
     end
 end
 
-function scanCorridor(xs, ys, maxX, maxY, length)
+function scanCorridor(xs, ys, maxX, maxY, length, floor)
 
     local isX = false
     local rx = math.random(0, 1)
@@ -49,22 +49,22 @@ function scanCorridor(xs, ys, maxX, maxY, length)
     if isX then
         if rx == xs + maxX then
             for x = 1, length do
-                if tileMap[(rx + x) .. " " .. (ry - 2)] ~= nil or
-                   tileMap[(rx + x) .. " " .. (ry - 1)] ~= nil or
-                   tileMap[(rx + x) .. " " .. ry] ~= nil or
-                   tileMap[(rx + x) .. " " .. (ry + 1)] ~= nil or
-                   tileMap[(rx + x) .. " " .. (ry + 2)] ~= nil then
+                if floor.tileMap[(rx + x) .. " " .. (ry - 2)] ~= nil or
+                   floor.tileMap[(rx + x) .. " " .. (ry - 1)] ~= nil or
+                   floor.tileMap[(rx + x) .. " " .. ry] ~= nil or
+                   floor.tileMap[(rx + x) .. " " .. (ry + 1)] ~= nil or
+                   floor.tileMap[(rx + x) .. " " .. (ry + 2)] ~= nil then
                        return {av = false}
                    end
             end
             return {x = rx, y = ry, av = true, dir = "x+"}
         else
             for x = 1, length do
-                if tileMap[(rx - x) .. " " .. (ry - 2)] ~= nil or
-                   tileMap[(rx - x) .. " " .. (ry - 1)] ~= nil or
-                   tileMap[(rx - x) .. " " .. ry] ~= nil or
-                   tileMap[(rx - x) .. " " .. (ry + 1)] ~= nil or
-                   tileMap[(rx - x) .. " " .. (ry + 2)] ~= nil then
+                if floor.tileMap[(rx - x) .. " " .. (ry - 2)] ~= nil or
+                   floor.tileMap[(rx - x) .. " " .. (ry - 1)] ~= nil or
+                   floor.tileMap[(rx - x) .. " " .. ry] ~= nil or
+                   floor.tileMap[(rx - x) .. " " .. (ry + 1)] ~= nil or
+                   floor.tileMap[(rx - x) .. " " .. (ry + 2)] ~= nil then
                        return {av = false}
                    end
             end
@@ -73,22 +73,22 @@ function scanCorridor(xs, ys, maxX, maxY, length)
     else
         if ry == ys + maxY then
             for y = 1, length do
-                if tileMap[(rx - 2) .. " " .. (ry + y)] ~= nil or
-                   tileMap[(rx - 1) .. " " .. (ry + y)] ~= nil or
-                   tileMap[rx .. " " .. (ry + y)] ~= nil or
-                   tileMap[(rx + 1) .. " " .. (ry + y)] ~= nil or
-                   tileMap[(rx + 2) .. " " .. (ry + y)] ~= nil then
+                if floor.tileMap[(rx - 2) .. " " .. (ry + y)] ~= nil or
+                   floor.tileMap[(rx - 1) .. " " .. (ry + y)] ~= nil or
+                   floor.tileMap[rx .. " " .. (ry + y)] ~= nil or
+                   floor.tileMap[(rx + 1) .. " " .. (ry + y)] ~= nil or
+                   floor.tileMap[(rx + 2) .. " " .. (ry + y)] ~= nil then
                        return {av = false}
                    end
             end
             return {x = rx, y = ry, av = true, dir = "y+"}
         else
             for y = 1, length do
-                if tileMap[(rx - 2) .. " " .. (ry - y)] ~= nil or
-                   tileMap[(rx - 1) .. " " .. (ry - y)] ~= nil or
-                   tileMap[rx .. " " .. (ry - y)] ~= nil or
-                   tileMap[(rx + 1) .. " " .. (ry - y)] ~= nil or
-                   tileMap[(rx + 2) .. " " .. (ry - y)] ~= nil then
+                if floor.tileMap[(rx - 2) .. " " .. (ry - y)] ~= nil or
+                   floor.tileMap[(rx - 1) .. " " .. (ry - y)] ~= nil or
+                   floor.tileMap[rx .. " " .. (ry - y)] ~= nil or
+                   floor.tileMap[(rx + 1) .. " " .. (ry - y)] ~= nil or
+                   floor.tileMap[(rx + 2) .. " " .. (ry - y)] ~= nil then
                        return {av = false}
                    end
             end
@@ -99,61 +99,61 @@ function scanCorridor(xs, ys, maxX, maxY, length)
 
 end
 
-function makeCorridor(xs, ys, dir, length)
+function makeCorridor(xs, ys, dir, length, floor)
     if dir == "x+" then
         for x = 0, length do
-            tileMap[(xs + x) .. " " .. (ys - 2)] = tiles["brickWall"]
-            tileMap[(xs + x) .. " " .. (ys - 1)] = tiles["brickFloor"]
-            tileMap[(xs + x) .. " " ..        ys] = tiles["brickFloor"]
-            tileMap[(xs + x) .. " " .. (ys + 1)] = tiles["brickFloor"]
-            tileMap[(xs + x) .. " " .. (ys + 2)] = tiles["brickWall"]
-            if xs + x > rightX then rightX = xs + x end
+            floor.tileMap[(xs + x) .. " " .. (ys - 2)] = tiles["brickWall"]
+            floor.tileMap[(xs + x) .. " " .. (ys - 1)] = tiles["brickFloor"]
+            floor.tileMap[(xs + x) .. " " ..        ys] = tiles["brickFloor"]
+            floor.tileMap[(xs + x) .. " " .. (ys + 1)] = tiles["brickFloor"]
+            floor.tileMap[(xs + x) .. " " .. (ys + 2)] = tiles["brickWall"]
+            if xs + x > floor.rightX then floor.rightX = xs + x end
         end
 
     elseif dir == "x-" then
         for x = 0, length do
-            tileMap[(xs - x) .. " " .. (ys - 2)] = tiles["brickWall"]
-            tileMap[(xs - x) .. " " .. (ys - 1)] = tiles["brickFloor"]
-            tileMap[(xs - x) .. " " ..        ys] = tiles["brickFloor"]
-            tileMap[(xs - x) .. " " .. (ys + 1)] = tiles["brickFloor"]
-            tileMap[(xs - x) .. " " .. (ys + 2)] = tiles["brickWall"]
-            if xs - x < leftX then leftX = xs - x end
+            floor.tileMap[(xs - x) .. " " .. (ys - 2)] = tiles["brickWall"]
+            floor.tileMap[(xs - x) .. " " .. (ys - 1)] = tiles["brickFloor"]
+            floor.tileMap[(xs - x) .. " " ..        ys] = tiles["brickFloor"]
+            floor.tileMap[(xs - x) .. " " .. (ys + 1)] = tiles["brickFloor"]
+            floor.tileMap[(xs - x) .. " " .. (ys + 2)] = tiles["brickWall"]
+            if xs - x < floor.leftX then floor.leftX = xs - x end
         end
 
     elseif dir == "y+" then
         for y = 0, length do
-            tileMap[(xs - 2) .. " " .. (ys + y)] = tiles["brickWall"]
-            tileMap[(xs - 1) .. " " .. (ys + y)] = tiles["brickFloor"]
-            tileMap[       xs .. " " .. (ys + y)] = tiles["brickFloor"]
-            tileMap[(xs + 1) .. " " .. (ys + y)] = tiles["brickFloor"]
-            tileMap[(xs + 2) .. " " .. (ys + y)] = tiles["brickWall"]
-            if ys + y > bottomY then bottomY = ys + y end
+            floor.tileMap[(xs - 2) .. " " .. (ys + y)] = tiles["brickWall"]
+            floor.tileMap[(xs - 1) .. " " .. (ys + y)] = tiles["brickFloor"]
+            floor.tileMap[       xs .. " " .. (ys + y)] = tiles["brickFloor"]
+            floor.tileMap[(xs + 1) .. " " .. (ys + y)] = tiles["brickFloor"]
+            floor.tileMap[(xs + 2) .. " " .. (ys + y)] = tiles["brickWall"]
+            if ys + y > floor.bottomY then floor.bottomY = ys + y end
         end
 
     elseif dir == "y-" then
         for y = 0, length do
-            tileMap[(xs - 2) .. " " .. (ys - y)] = tiles["brickWall"]
-            tileMap[(xs - 1) .. " " .. (ys - y)] = tiles["brickFloor"]
-            tileMap[       xs .. " " .. (ys - y)] = tiles["brickFloor"]
-            tileMap[(xs + 1) .. " " .. (ys - y)] = tiles["brickFloor"]
-            tileMap[(xs + 2) .. " " .. (ys - y)] = tiles["brickWall"]
-            if ys - y < topY then topY = ys - y end
+            floor.tileMap[(xs - 2) .. " " .. (ys - y)] = tiles["brickWall"]
+            floor.tileMap[(xs - 1) .. " " .. (ys - y)] = tiles["brickFloor"]
+            floor.tileMap[       xs .. " " .. (ys - y)] = tiles["brickFloor"]
+            floor.tileMap[(xs + 1) .. " " .. (ys - y)] = tiles["brickFloor"]
+            floor.tileMap[(xs + 2) .. " " .. (ys - y)] = tiles["brickWall"]
+            if ys - y < floor.topY then floor.topY = ys - y end
         end
     end
 
 end
 
-function generateMap()
+function generateMap(floor)
     local roomNum = math.random(5, 10)
-    generateRoom(0, 0, 20, 20)
+    generateRoom(0, 0, 20, 20, floor)
     for room = 0, roomNum do
         while true do
             local xs = math.random(-100, 100)
             local ys = math.random(-100, 100)
             local maxX = math.random(15, 30)
             local maxY = math.random(15, 30)
-            if scanRoom(xs, ys, maxX, maxY) then
-                generateRoom(xs, ys, maxX, maxY)
+            if scanRoom(xs, ys, maxX, maxY, floor) then
+                generateRoom(xs, ys, maxX, maxY, floor)
                 break
             end
         end
@@ -170,19 +170,19 @@ function generateMap()
     end
 end
 
-function randWalkMap(steps)
+function randWalkMap(steps, floor)
     local tileNum = 0
     local pos = {x = 0, y = 0}
 
     while tileNum < steps do
 
-        if tileMap[pos.x .. " " .. pos.y] == nil then
-            tileMap[pos.x .. " " .. pos.y] = tiles["brickFloor"]
+        if floor.tileMap[pos.x .. " " .. pos.y] == nil then
+            floor.tileMap[pos.x .. " " .. pos.y] = tiles["brickFloor"]
             tileNum = tileNum + 1
-            if pos.x > rightX  then rightX = pos.x end
-            if pos.x < leftX   then leftX = pos.x end
-            if pos.y > bottomY then bottomY = pos.y end
-            if pos.y < topY    then topY = pos.y end
+            if pos.x > floor.rightX  then floor.rightX = pos.x end
+            if pos.x < floor.leftX   then floor.leftX = pos.x end
+            if pos.y > floor.bottomY then floor.bottomY = pos.y end
+            if pos.y < floor.topY    then floor.topY = pos.y end
         end
 
         local dir = math.random(1, 4)
@@ -200,25 +200,25 @@ function randWalkMap(steps)
     end
 end
 
-function fillHolesAndSetWalls()
+function fillHolesAndSetWalls(floor)
     for i = 0, 5 do
-        for y = topY - 1, bottomY + 1 do
-            for x = leftX - 1, rightX + 1 do
-                if tileMap[x .. " " .. y] == nil or tileMap[x .. " " .. y].solid then
+        for y = floor.topY - 1, floor.bottomY + 1 do
+            for x = floor.leftX - 1, floor.rightX + 1 do
+                if floor.tileMap[x .. " " .. y] == nil or floor.tileMap[x .. " " .. y].solid then
 
                     local surround = 0
 
-                    if tileMap[x + 1 .. " " .. y]     == nil or tileMap[x + 1 .. " " .. y].solid then surround = surround + 1 end
-                    if tileMap[x - 1 .. " " .. y]     == nil or tileMap[x - 1 .. " " .. y].solid then surround = surround + 1 end
-                    if tileMap[x .. " " .. y + 1]     == nil or tileMap[x .. " " .. y + 1].solid then surround = surround + 1 end
-                    if tileMap[x .. " " .. y - 1]     == nil or tileMap[x .. " " .. y - 1].solid then surround = surround + 1 end
-                    if tileMap[x + 1 .. " " .. y + 1] == nil or tileMap[x + 1 .. " " .. y + 1].solid then surround = surround + 1 end
-                    if tileMap[x + 1 .. " " .. y - 1] == nil or tileMap[x + 1 .. " " .. y - 1].solid then surround = surround + 1 end
-                    if tileMap[x - 1 .. " " .. y + 1] == nil or tileMap[x - 1 .. " " .. y + 1].solid then surround = surround + 1 end
-                    if tileMap[x - 1 .. " " .. y - 1] == nil or tileMap[x - 1 .. " " .. y - 1].solid then surround = surround + 1 end
+                    if floor.tileMap[x + 1 .. " " .. y]     == nil or floor.tileMap[x + 1 .. " " .. y].solid then surround = surround + 1 end
+                    if floor.tileMap[x - 1 .. " " .. y]     == nil or floor.tileMap[x - 1 .. " " .. y].solid then surround = surround + 1 end
+                    if floor.tileMap[x .. " " .. y + 1]     == nil or floor.tileMap[x .. " " .. y + 1].solid then surround = surround + 1 end
+                    if floor.tileMap[x .. " " .. y - 1]     == nil or floor.tileMap[x .. " " .. y - 1].solid then surround = surround + 1 end
+                    if floor.tileMap[x + 1 .. " " .. y + 1] == nil or floor.tileMap[x + 1 .. " " .. y + 1].solid then surround = surround + 1 end
+                    if floor.tileMap[x + 1 .. " " .. y - 1] == nil or floor.tileMap[x + 1 .. " " .. y - 1].solid then surround = surround + 1 end
+                    if floor.tileMap[x - 1 .. " " .. y + 1] == nil or floor.tileMap[x - 1 .. " " .. y + 1].solid then surround = surround + 1 end
+                    if floor.tileMap[x - 1 .. " " .. y - 1] == nil or floor.tileMap[x - 1 .. " " .. y - 1].solid then surround = surround + 1 end
 
-                    if surround <= 3 then tileMap[x .. " " .. y] = tiles["brickFloor"]
-                    else tileMap[x .. " " .. y] = tiles["brickWall"] end
+                    if surround <= 3 then floor.tileMap[x .. " " .. y] = tiles["brickFloor"]
+                    else floor.tileMap[x .. " " .. y] = tiles["brickWall"] end
 
                 end
             end
@@ -226,10 +226,10 @@ function fillHolesAndSetWalls()
     end
 end
 
-function addProps()
-    for y = topY - 1, bottomY + 1 do
-        for x = leftX - 1, rightX + 1 do
-            if tileMap[x .. " " .. y] ~= nil and tileMap[x .. " ".. y].id == "brickFloor" and math.random(0, 50) == 1 then
+function addProps(floor)
+    for y = floor.topY - 1, floor.bottomY + 1 do
+        for x = floor.leftX - 1, floor.rightX + 1 do
+            if floor.tileMap[x .. " " .. y] ~= nil and floor.tileMap[x .. " ".. y].id == "brickFloor" and math.random(0, 50) == 1 then
                 local crate = Prop()
 				crate.x = x
                 crate.y = y
@@ -241,26 +241,26 @@ function addProps()
     end
 end
 
-function exampleMap()
-    generateRoom(0, 0, 50, 50)
+function exampleMap(floor)
+    generateRoom(0, 0, 50, 50, floor)
     for x = 20, 30 do
-        tileMap[x .. " " .. 25] = tiles["brickWall"]
+        floor.tileMap[x .. " " .. 25] = tiles["brickWall"]
     end
     for y = 20, 30 do
-        tileMap[25 .. " " .. y] = tiles["brickWall"]
+        floor.tileMap[25 .. " " .. y] = tiles["brickWall"]
     end
 end
 
-function generateStringMap()
-    for y = topY - 1, bottomY + 1 do
+function generateStringMap(floor)
+    for y = floor.topY - 1, floor.bottomY + 1 do
         local row = {}
-        for x = leftX - 1, rightX + 1 do
-            if tileMap[x .. " " .. y].solid then
+        for x = floor.leftX - 1, floor.rightX + 1 do
+            if floor.tileMap[x .. " " .. y].solid then
                 table.insert(row, 1)
             else
                 table.insert(row, 0)
             end
         end
-        table.insert(stringTileMap, row)
+        table.insert(floor.stringTileMap, row)
     end
 end

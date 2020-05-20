@@ -5,7 +5,8 @@ Player:addparent(Entity)
 Player.id = "player"
 Player.type = "entities"
 Player.entitySpeed = 64
-function Player:load()
+function Player:load(floor)
+    self.floor = floor
     self.id = "player"
     self.animFrames = 8
     self:loadAnim()
@@ -40,7 +41,8 @@ function Player:input(dt)
         if love.keyboard.isDown(self.controls["left"])  then self.xVelocity = math.max(self.xVelocity - self.entityAcceleration, -self.entitySpeed); moving = true end
         if love.keyboard.isDown(self.controls["down"])  then self.yVelocity = math.min(self.yVelocity + self.entityAcceleration,  self.entitySpeed); moving = true end
         if love.keyboard.isDown(self.controls["up"])    then self.yVelocity = math.max(self.yVelocity - self.entityAcceleration, -self.entitySpeed); moving = true end
-		if love.keyboard.isDown(self.controls["roll"])    then
+        if love.keyboard.isDown("j")                    then self.floor = "caveDungeon" end
+		if love.keyboard.isDown(self.controls["roll"])  then
 			if (self.rollCooldown == 0) and moving then
 				self.rolling = true
 				self.rollCooldown = self.rollWait

@@ -16,7 +16,8 @@ Entity.shadow = {}
 Entity.hostile = false
 Entity.animFrames = 4
 
-function Entity:load()
+function Entity:load(floor)
+    self.floor = floor
     self:loadAnim()
 end
 
@@ -87,20 +88,20 @@ function Entity:move(dt)
     mv.x = self.x + self.xVelocity * dt/2
     mv.y = self.y + self.yVelocity * dt/2
 
-    mv.XtopLeft = tileMap[math.floor(mv.x + pushValue) .. " " .. math.floor(self.y + pushValue + 0.5)]
-    mv.XbotLeft = tileMap[math.floor(mv.x + pushValue) .. " " .. ceiling (self.y - pushValue)]
-    mv.XtopRight = tileMap[ceiling(mv.x - pushValue) .. " " .. math.floor(self.y + pushValue + 0.5)]
-    mv.XbotRight = tileMap[ceiling(mv.x - pushValue) .. " " .. ceiling (self.y - pushValue)]
+    mv.XtopLeft = floors[self.floor].tileMap[math.floor(mv.x + pushValue) .. " " .. math.floor(self.y + pushValue + 0.5)]
+    mv.XbotLeft = floors[self.floor].tileMap[math.floor(mv.x + pushValue) .. " " .. ceiling (self.y - pushValue)]
+    mv.XtopRight = floors[self.floor].tileMap[ceiling(mv.x - pushValue) .. " " .. math.floor(self.y + pushValue + 0.5)]
+    mv.XbotRight = floors[self.floor].tileMap[ceiling(mv.x - pushValue) .. " " .. ceiling (self.y - pushValue)]
 
     if (self.x > mv.x) and (mv.XtopLeft ~= nil and not mv.XtopLeft.solid) and (mv.XbotLeft ~= nil and not mv.XbotLeft.solid) or --mv Left
        (self.x < mv.x) and (mv.XtopRight ~= nil and not mv.XtopRight.solid) and (mv.XbotRight ~= nil and not mv.XbotRight.solid) then --mv Right
            self.x = mv.x
     end
 
-    mv.YtopLeft = tileMap[math.floor(self.x + pushValue) .. " " .. math.floor(mv.y + pushValue + 0.5)]
-    mv.YtopRight = tileMap[ceiling(self.x - pushValue) .. " " .. math.floor(mv.y + pushValue + 0.5)]
-    mv.YbotLeft = tileMap[math.floor(self.x + pushValue) .. " " .. ceiling (mv.y - pushValue)]
-    mv.YbotRight = tileMap[ceiling(self.x - pushValue) .. " " .. ceiling (mv.y - pushValue)]
+    mv.YtopLeft = floors[self.floor].tileMap[math.floor(self.x + pushValue) .. " " .. math.floor(mv.y + pushValue + 0.5)]
+    mv.YtopRight = floors[self.floor].tileMap[ceiling(self.x - pushValue) .. " " .. math.floor(mv.y + pushValue + 0.5)]
+    mv.YbotLeft = floors[self.floor].tileMap[math.floor(self.x + pushValue) .. " " .. ceiling (mv.y - pushValue)]
+    mv.YbotRight = floors[self.floor].tileMap[ceiling(self.x - pushValue) .. " " .. ceiling (mv.y - pushValue)]
 
     if (self.y < mv.y) and (mv.YbotLeft ~= nil and not mv.YbotLeft.solid) and (mv.YbotRight ~= nil and not mv.YbotRight.solid) or --mv Down
        (self.y > mv.y) and (mv.YtopLeft ~= nil and not mv.YtopLeft.solid) and (mv.YtopRight ~= nil and not mv.YtopRight.solid) then --mv Up

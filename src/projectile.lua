@@ -19,8 +19,9 @@ local projTypes = {
 	},
 }
 
-function Projectile:load(id)
+function Projectile:load(id, floor)
 	local p = projTypes[id]
+	self.floor = floor
     self.x = 0
     self.y = 0
     self.angle = 0
@@ -53,7 +54,7 @@ function Projectile:update(dt)
 		self.mv = {}
         self.mv.x = self.x + ((math.sin(self.angle) * self.speed) * dt * 60) / 4
 		self.mv.y = self.y + ((-math.cos(self.angle) * self.speed) * dt * 60) / 4
-		if tileMap[math.floor((self.mv.x - 0.5)/32) .. " " .. math.floor((self.mv.y - 0.5)/32)] ~= nil and not tileMap[math.floor((self.mv.x - 0.5)/32) .. " " .. math.floor((self.mv.y - 0.5)/32)].solid then
+		if floors[self.floor].tileMap[math.floor((self.mv.x - 0.5)/32) .. " " .. math.floor((self.mv.y - 0.5)/32)] ~= nil and not floors[self.floor].tileMap[math.floor((self.mv.x - 0.5)/32) .. " " .. math.floor((self.mv.y - 0.5)/32)].solid then
 			self.x = self.mv.x
 			self.y = self.mv.y
 		else

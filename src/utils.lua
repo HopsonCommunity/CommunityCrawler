@@ -56,27 +56,27 @@ function inList(list, element)
     return false
 end
 
-function inTileMap(x, y)
-    return tileMap[x .. " " .. y] ~= nil
+function inTileMap(x, y, floor)
+    return floor.tileMap[x .. " " .. y] ~= nil
 end
 
 function ceiling(val)
     if math.ceil(val) == 0 then return 0 else return math.ceil(val) end
 end
 
-function generateMapLighting()
-	for k, v in pairs(tileMap) do
+function generateMapLighting(floor)
+	for k, v in pairs(floor.tileMap) do
         local coords = split(k, " ")
 		if v.solid then
-			local top = tileMap[coords[1] .. " " .. coords[2] - 1]
-			local bottom = tileMap[coords[1] .. " " .. coords[2] + 1]
-			local left = tileMap[coords[1] - 1 .. " " .. coords[2]]
-			local right = tileMap[coords[1] + 1 .. " " .. coords[2]]
+			local top = floor.tileMap[coords[1] .. " " .. coords[2] - 1]
+			local bottom = floor.tileMap[coords[1] .. " " .. coords[2] + 1]
+			local left = floor.tileMap[coords[1] - 1 .. " " .. coords[2]]
+			local right = floor.tileMap[coords[1] + 1 .. " " .. coords[2]]
 			if top and bottom and left and right then
 				if not (top.solid and bottom.solid and left.solid and right.solid) or (top.lightHitbox or bottom.lightHitbox or left.lightHitbox or right.lightHitbox) then
-					if tileMap[coords[1] .. " " .. coords[2]].lightHitbox then
+					if floor.tileMap[coords[1] .. " " .. coords[2]].lightHitbox then
 						local vertices = {}
-						for i, v in ipairs(tileMap[coords[1] .. " " .. coords[2]].lightHitbox) do
+						for i, v in ipairs(floor.tileMap[coords[1] .. " " .. coords[2]].lightHitbox) do
 							table.insert(vertices, coords[1]*32 + v.x)
 							table.insert(vertices, coords[2]*32 + v.y)
 						end
@@ -86,9 +86,9 @@ function generateMapLighting()
 					end
 				end
 			else
-				if tileMap[coords[1] .. " " .. coords[2]].lightHitbox then
+				if floor.tileMap[coords[1] .. " " .. coords[2]].lightHitbox then
 					local vertices = {}
-					for i, v in ipairs(tileMap[coords[1] .. " " .. coords[2]].lightHitbox) do
+					for i, v in ipairs(floor.tileMap[coords[1] .. " " .. coords[2]].lightHitbox) do
 						table.insert(vertices, coords[1]*32 + v.x)
 						table.insert(vertices, coords[2]*32 + v.y)
 					end
@@ -109,11 +109,11 @@ function generateMapLighting()
     end
 end
 
-function findSpawn()
+function findSpawn(floor)
 	local f
 	for y = topY + 5, bottomY do
 		for x = leftX + 1, rightX do
-			if tileMap[x .. " " .. y] ~= nil and not tileMap[x .. " " .. y].solid then
+			if floor.tileMap[x .. " " .. y] ~= nil and not floor.tileMap[x .. " " .. y].solid then
 				player.x = x
 				player.y = y
 				f = true
@@ -124,11 +124,11 @@ function findSpawn()
 	end
 end
 
-function randWalkSpawn(entity, move)
+function randWalkSpawn(entity, move, floor)
     local pos = {x = 0, y = 0}
     local moved = 0
     while true do
-        if tileMap[pos.x .. " " .. pos.y] ~= nil and not tileMap[pos.x .. " " .. pos.y].solid and moved > move then
+        if floor.tileMap[pos.x .. " " .. pos.y] ~= nil and not floor.tileMap[pos.x .. " " .. pos.y].solid and moved > move then
             entity.x = pos.x
             entity.y = pos.y
             break
@@ -137,22 +137,22 @@ function randWalkSpawn(entity, move)
         while true do
             local dir = math.random(1, 4)
             if dir == 1 then
-                if tileMap[pos.x + 1 .. " " .. pos.y] ~= nil then
+                if floor.tileMap[pos.x + 1 .. " " .. pos.y] ~= nil then
                     pos = {x = pos.x + 1, y = pos.y}
                     break
                 end
             elseif dir == 2 then
-                if tileMap[pos.x - 1 .. " " .. pos.y] ~= nil then
+                if floor.tileMap[pos.x - 1 .. " " .. pos.y] ~= nil then
                     pos = {x = pos.x - 1, y = pos.y}
                     break
                 end
             elseif dir == 3 then
-                if tileMap[pos.x .. " " .. pos.y + 1] ~= nil then
+                if floor.tileMap[pos.x .. " " .. pos.y + 1] ~= nil then
                     pos = {x = pos.x, y = pos.y + 1}
                     break
                 end
             elseif dir == 4 then
-                if tileMap[pos.x .. " " .. pos.y - 1] ~= nil then
+                if floor.tileMap[pos.x .. " " .. pos.y - 1] ~= nil then
                     pos = {x = pos.x, y = pos.y - 1}
                     break
                 end
@@ -182,32 +182,34 @@ end
 function updateProjectiles()
 	local dt = love.timer.getDelta()
 	for k, v in pairs(projectiles) do
-		v:update(dt)
-		v.lifespan = v.lifespan - dt * 60
-		if v.lifespan <= 0 then
-			if v.light then
-				v.light:Remove()
-			end
-			v = nil
-			projectiles[k] = nil
-		else
-			if v.light then
-				v.light:SetPosition(v.x, v.y)
-			end
-			local val = 1
-			if v.facing == "left" then val = -1 end
-			love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
-			if v.trail then
-				v.trailTimer = v.trailTimer + dt
-				if v.trailTimer > v.trailWait then
-					nim.addParticle(v.trail, v.x, v.y)
-					v.trailTimer = v.trailTimer % v.trailWait
-				end
-			end
-		end
+        if v.floor == player.floor then
+    		v:update(dt)
+    		v.lifespan = v.lifespan - dt * 60
+    		if v.lifespan <= 0 then
+    			if v.light then
+    				v.light:Remove()
+    			end
+    			v = nil
+    			projectiles[k] = nil
+    		else
+    			if v.light then
+    				v.light:SetPosition(v.x, v.y)
+    			end
+    			local val = 1
+    			if v.facing == "left" then val = -1 end
+    			love.graphics.draw(v.texture, v.x, v.y, v.angle, val)
+    			if v.trail then
+    				v.trailTimer = v.trailTimer + dt
+    				if v.trailTimer > v.trailWait then
+    					nim.addParticle(v.trail, v.x, v.y)
+    					v.trailTimer = v.trailTimer % v.trailWait
+    				end
+    			end
+    		end
+        end
     end
 end
 
 function tileRaycast(x, y, tx, ty)
-	
+
 end

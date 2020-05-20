@@ -22,10 +22,10 @@ function Ranged:load(id, name, description, minDmg, maxDmg, critMultiplier, cool
 	self.muzzleFlash = muzzleFlash or nim.newParticle({1, 1, 1}, {1, 0.8, 0.2}, {1, 0.9, 0.5}, 16, 16, 18, "circle", 0.05, 0.05, 0, 0, 0, 0, 0.95, false, "fill", 0, 0, 0)
 end
 
-function Ranged:leftClick(x, y)
+function Ranged:leftClick(x, y, floor)
     for i = 1, self.bulletNum do
         local newProjectile = Projectile()
-        newProjectile:load(self.bulletType)
+        newProjectile:load(self.bulletType, floor)
         newProjectile.minDmg = newProjectile.minDmg * self.minDmg
         newProjectile.maxDmg = newProjectile.maxDmg * self.maxDmg
         newProjectile.critMultiplier = newProjectile.critMultiplier * self.critMultiplier
