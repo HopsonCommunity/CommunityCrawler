@@ -70,7 +70,7 @@ function Player:updateRoll()
 end
 
 function Player:update(dt)
-    if love.mouse.getX() < love.graphics.getWidth()/2 then self.facing = "left" else self.facing = "right" end
+    if not self.rolling then if love.mouse.getX() < love.graphics.getWidth()/2 then self.facing = "left" else self.facing = "right" end end
     self:input(dt)
     self:move(dt)
 

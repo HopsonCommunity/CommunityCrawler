@@ -5,7 +5,7 @@ Ranged:addparent(Weapon)
 Ranged.type = "ranged"
 Ranged.cooldownTimer = 0
 
-function Ranged:load(id, name, description, minDmg, maxDmg, critMultiplier, cooldown, bulletNum, spread, bulletType, fireType)
+function Ranged:load(id, name, description, minDmg, maxDmg, critMultiplier, cooldown, bulletNum, spread, bulletType, fireType, muzzleFlash)
     self.id = id
     self.name = name
     self.description = description
@@ -19,6 +19,7 @@ function Ranged:load(id, name, description, minDmg, maxDmg, critMultiplier, cool
     self.texture = loadImage("items", self.id)
 	self.bulletType = bulletType or "testBullet"
 	self.fireType = fireType or "semi"
+	self.muzzleFlash = muzzleFlash or nim.newParticle({1, 1, 1}, {1, 0.8, 0.2}, {1, 0.9, 0.5}, 16, 16, 18, "circle", 0.05, 0.05, 0, 0, 0, 0, 0.95, false, "fill", 0, 0, 0)
 end
 
 function Ranged:leftClick(x, y)
@@ -30,22 +31,23 @@ function Ranged:leftClick(x, y)
         newProjectile.critMultiplier = newProjectile.critMultiplier * self.critMultiplier
         newProjectile.critChance = newProjectile.critChance * self.critChance
         newProjectile.y = player.y * 32
-        local opp = y - love.graphics.getHeight()/2 - player.y
-        local adj = x - love.graphics.getWidth()/2 - player.x
-        local hyp = math.sqrt(opp * opp + adj * adj)
-        local ang = math.asin(opp / hyp)
+		newProjectile.x = player.x * 32
+        local my = y - love.graphics.getHeight()/2 - player.y
+        local mx = x - love.graphics.getWidth()/2 - player.x
+        local ang = -1*math.atan2(-my, mx)-math.rad(20)
         if player.facing == "left" then
-            newProjectile.x = player.x * 32 - math.cos(ang) * 24 - math.max(math.cos(-ang), 0) * 24
-            ang = ang * -1
-            ang = ang - math.rad(90)
-            newProjectile.y = newProjectile.y + 17
+			ang = ang + math.rad(180)
+			newProjectile.x = newProjectile.x + (math.cos(ang)*16 + 16)*-1
+            newProjectile.y = newProjectile.y + (math.sin(ang)*16 + 16)*-1
+			ang = ang - math.rad(70)
         else
-            newProjectile.x = (player.x + 1) * 32 + math.cos(ang) * 24 + math.max(math.cos(ang), 0) * 24
-            newProjectile.y = newProjectile.y + 3
-            ang = ang + math.rad(90)
+            newProjectile.x = newProjectile.x + math.cos(ang)*16 + 48
+            newProjectile.y = newProjectile.y + math.sin(ang)*16 + 16
+			ang = ang + math.rad(115)
         end
         if self.spread then ang = ang + math.rad(math.random(self.spread * 2) - self.spread) end
         newProjectile.angle = ang
+		nim.addParticle(self.muzzleFlash, newProjectile.x, newProjectile.y)
         table.insert(projectiles, newProjectile)
     end
     self.cooldownTimer = self.cooldown

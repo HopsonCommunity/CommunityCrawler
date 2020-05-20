@@ -191,14 +191,17 @@ function love.draw()
 	local flip = player.facing == "left"
     nim.drawAnim(player.currentAnimation, player.x * 32, player.y * 32, 90, flip)
 	if player.inventory.hotbar[player.inventory.selected].id ~= nil then
-        local opp = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
-        local adj = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
-        local hyp = math.sqrt(opp * opp + adj * adj)
-        local f = 1
-        if flip then f = -1 end
-        local gunPos = 48
-        if f == -1 then gunPos = -8 end
-        love.graphics.draw(player.inventory.hotbar[player.inventory.selected].texture, player.x * 32 + gunPos, player.y * 32 + 16, f*math.asin(opp / hyp), f, 1, 16, 16)
+        local my = love.mouse.getY() - love.graphics.getHeight()/2 - player.y
+        local mx = love.mouse.getX() - love.graphics.getWidth()/2 - player.x
+		local gunPos = 48
+		local f = 1
+		local h = 0
+        if flip then
+			f = -1
+			gunPos = -8
+			h = math.rad(180)
+		end
+        love.graphics.draw(player.inventory.hotbar[player.inventory.selected].texture, player.x * 32 + gunPos, player.y * 32 + 16, -1*math.atan2(-my, mx)+h, f, 1, 16, 16)
     end
 	love.graphics.reset()
 

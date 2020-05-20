@@ -17,7 +17,7 @@ function itemFactory(id)
         return item
 	elseif id == "flamethrower" then
 		local item = Ranged()
-        item:load("flamethrower", "Flamethrower", "A shotgun. That fits in your pocket.", 60, 120, 1.3, 0.1, 5, 15, "flame", "auto")
+        item:load("flamethrower", "Flamethrower", "A shotgun. That fits in your pocket.", 60, 120, 1.3, 0.1, 5, 15, "flame", "auto", nim.newParticle({1, 1, 1}, {1, 0.5, 0}, {1, 0.6, 0.3}, 8, 8, 10, "circle", 0.1, 0.1, 0, 0, 0, 0, 0.95, false, "fill", 0, 0, 0))
         return item
     else
         return nil
