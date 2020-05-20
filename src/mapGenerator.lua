@@ -234,7 +234,7 @@ function addProps(floor)
 				crate.x = x
                 crate.y = y
                 crate.id = floor.mapgen.prop
-                crate:load()
+                crate:load(floor.type)
                 table.insert(entities, crate)
             end
         end
