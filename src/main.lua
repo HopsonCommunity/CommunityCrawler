@@ -16,6 +16,10 @@ require "commands"
 require "projectile"
 require "floor"
 require "pubsub"
+require "skillClass"
+require "mageClass"
+require "rangerClass"
+require "warriorClass"
 require "gameState"
 require "classSelectGameState"
 require "ingameState"
@@ -82,6 +86,10 @@ end
 
 function love.mousepressed(x, y, button, isTouch)
     player.gameState:mousepressed(x, y, button, isTouch)
+end
+
+function love.mousereleased(x, y, button, isTouch)
+    player.gameState:mousereleased(x, y, button, isTouch)
 end
 
 function love.wheelmoved(x, y)

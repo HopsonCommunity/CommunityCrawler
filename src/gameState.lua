@@ -16,5 +16,8 @@ end
 function GameState:mousepressed(x, y, button, isTouch)
 end
 
+function GameState:mousereleased(x, y, button, isTouch)
+end
+
 function GameState:wheelmoved(x, y)
 end

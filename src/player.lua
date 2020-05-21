@@ -7,6 +7,7 @@ Player.type = "entities"
 Player.entitySpeed = 64
 function Player:load(floor)
     self.gameState = GameState()
+    self.class = SkillClass()
     self.floor = floor
     self.id = "player"
     self.animFrames = 8
