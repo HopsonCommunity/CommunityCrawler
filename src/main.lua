@@ -15,6 +15,7 @@ require "drawables"
 require "commands"
 require "projectile"
 require "floor"
+require "pubsub"
 
 function love.load()
     drawWorld = "brickDungeon"
