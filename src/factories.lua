@@ -24,6 +24,12 @@ function itemFactory(id)
     end
 end
 
+function droppedItemFactory(id)
+	local item = DroppedItem()
+	item.id = id
+	return item
+end
+
 function entityFactory(id)
     if id == "rose" then
         local entity = Entity()

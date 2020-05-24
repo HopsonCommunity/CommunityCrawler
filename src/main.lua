@@ -8,6 +8,7 @@ require "melee"
 require "factories"
 require "inventory"
 require "entity"
+require "droppedItem"
 require "prop"
 require "player"
 require "mapGenerator"
@@ -47,12 +48,16 @@ function setupWorlds()
     for entity = 0, 10 do
         local zombie = entityFactory("zombie")
         local skelebomber = entityFactory("skelebomber")
+		local luger = droppedItemFactory("luger")
         zombie:load(drawWorld)
         skelebomber:load(drawWorld)
+		luger:load(drawWorld)
         randWalkSpawn(zombie, 20, floors[drawWorld])
         randWalkSpawn(skelebomber, 20, floors[drawWorld])
+		randWalkSpawn(luger, 20, floors[drawWorld])
         table.insert(entities, zombie)
         table.insert(entities, skelebomber)
+		table.insert(entities, luger)
     end
     initMenu()
     for k, v in pairs(entities) do

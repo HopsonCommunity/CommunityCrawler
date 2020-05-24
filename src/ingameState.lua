@@ -28,22 +28,24 @@ function IngameState:update(dt)
     for k, v in pairs(entities) do
         if v.floor == player.floor then
             v:update(dt)
-            for k2, proj in pairs(projectiles) do
-                if v:checkHit(proj) then
-                    local dmg = 0
-                    if math.random(proj.critChance) == 1 then
-                        dmg = (randomFloat(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
-                    else
-                        dmg = (randomFloat(proj.minDmg, proj.maxDmg))
-                    end
-                    v:hurt(dmg)
-                    if proj.light then
-                        proj.light:Remove()
-                    end
-                    proj = nil
-                    projectiles[k2] = nil
-                end
-            end
+			if v.type ~= "items" then
+				for k2, proj in pairs(projectiles) do
+					if v:checkHit(proj) then
+						local dmg = 0
+						if math.random(proj.critChance) == 1 then
+							dmg = (randomFloat(proj.minDmg, proj.maxDmg) * proj.critMultiplier)
+						else
+							dmg = (randomFloat(proj.minDmg, proj.maxDmg))
+						end
+						v:hurt(dmg)
+						if proj.light then
+							proj.light:Remove()
+						end
+						proj = nil
+						projectiles[k2] = nil
+					end
+				end
+			end
             if v.health <= 0 then
                 entities[k]:unloadShadow()
                 entities[k] = nil
